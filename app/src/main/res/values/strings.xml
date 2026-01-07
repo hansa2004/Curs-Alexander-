@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Curs-Alexander</string>
+    <string name="onboarding_title">Добро пожаловать</string>
+    <string name="onboarding_description">Приложение предназначено для поддержки самоконтроля состояния здоровья и носит информационный характер</string>
+    <string name="onboarding_name_hint">Ваше имя</string>
+    <string name="onboarding_consent">Я понимаю, что приложение не заменяет консультацию врача и не является медицинским изделием</string>
+    <string name="onboarding_start">Начать работу</string>
+    <string name="home_title">Главный экран приложения</string>
+
+    <!-- Онбординг: страницы -->
+    <string name="onb_next">Далее</string>
+
+    <string name="onb_welcome_title">Добро пожаловать</string>
+    <string name="onb_welcome_desc">Это приложение поможет вам отслеживать состояние здоровья и формировать полезные привычки</string>
+
+    <string name="onb_feature1_title">Напоминания о лекарствах</string>
+    <string name="onb_feature1_desc">Приложение поможет не забывать о приёме лекарств и фиксировать пропуски</string>
+
+    <string name="onb_feature2_title">Дневник симптомов</string>
+    <string name="onb_feature2_desc">Записывайте самочувствие, температуру и другие показатели</string>
+
+    <string name="onb_feature3_title">Анализ и тенденции</string>
+    <string name="onb_feature3_desc">Просматривайте графики и изменения состояния со временем</string>
+
+    <string name="onb_feature4_title">Медицинская мини-карта</string>
+    <string name="onb_feature4_desc">Храните информацию о лекарствах, заболеваниях и врачах</string>
+
+    <string name="onb_feature5_title">Безопасность данных</string>
+    <string name="onb_feature5_desc">Все данные хранятся только на вашем устройстве</string>
+
+    <string name="onb_last_title">Перед началом</string>
+    <string name="onb_last_consent">Я понимаю, что приложение носит информационный характер и не заменяет консультацию врача</string>
+</resources>
