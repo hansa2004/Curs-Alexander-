@@ -57,6 +57,7 @@
     <string name="profile_error_weight_invalid">Некорректный вес</string>
 
     <string name="home_greeting_placeholder">Здравствуйте</string>
+    <string name="home_subtitle">Главный экран</string>
     <string name="home_today_title">Сегодня</string>
     <string name="home_today_empty">Напоминаний на сегодня нет</string>
 
