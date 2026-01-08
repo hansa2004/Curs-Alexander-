@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.curs_alexander.R
 import com.example.curs_alexander.data.Prefs
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -17,16 +18,9 @@ class OnboardingFragment : Fragment() {
     private lateinit var prefs: Prefs
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
+    private lateinit var nextButton: MaterialButton
 
-    private val pages = listOf(
-        R.layout.page_onboarding_1,
-        R.layout.page_onboarding_2,
-        R.layout.page_onboarding_3,
-        R.layout.page_onboarding_4,
-        R.layout.page_onboarding_5,
-        R.layout.page_onboarding_6,
-        R.layout.page_onboarding_7,
-    )
+    private lateinit var adapter: OnboardingPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,31 +39,77 @@ class OnboardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewPager = view.findViewById(R.id.viewPagerOnboarding)
         tabLayout = view.findViewById(R.id.tabIndicator)
+        nextButton = view.findViewById(R.id.btnNext)
 
-        val adapter = OnboardingPagerAdapter(
-            pages,
-            onNextClick = { position -> viewPager.currentItem = position + 1 },
-            onFinishClick = { name, consentChecked ->
-                if (consentChecked) {
-                    val trimmed = name?.trim().orEmpty()
-                    if (trimmed.isNotEmpty()) {
-                        prefs.userName = trimmed
-                    }
-                    prefs.onboardingCompleted = true
-                    // Переход на главный экран и очистка back stack
-                    findNavController().navigate(R.id.homeFragment)
-                }
-            }
+        // Список из 5 фич онбординга
+        val items = listOf(
+            OnboardingItem(
+                iconRes = R.mipmap.ic_launcher, // замените на свою иконку
+                title = getString(R.string.onb_feature1_title),
+                description = getString(R.string.onb_feature1_desc)
+            ),
+            OnboardingItem(
+                iconRes = R.mipmap.ic_launcher,
+                title = getString(R.string.onb_feature2_title),
+                description = getString(R.string.onb_feature2_desc)
+            ),
+            OnboardingItem(
+                iconRes = R.mipmap.ic_launcher,
+                title = getString(R.string.onb_feature3_title),
+                description = getString(R.string.onb_feature3_desc)
+            ),
+            OnboardingItem(
+                iconRes = R.mipmap.ic_launcher,
+                title = getString(R.string.onb_feature4_title),
+                description = getString(R.string.onb_feature4_desc)
+            ),
+            OnboardingItem(
+                iconRes = R.mipmap.ic_launcher,
+                title = getString(R.string.onb_feature5_title),
+                description = getString(R.string.onb_feature5_desc)
+            )
         )
+
+        adapter = OnboardingPagerAdapter(items)
         viewPager.adapter = adapter
 
+        // Простой аниматор страниц
         viewPager.setPageTransformer { page, position ->
-            page.alpha = 0.25f + (1 - kotlin.math.abs(position))
-            val scale = 0.85f + (1 - kotlin.math.abs(position)) * 0.15f
+            page.alpha = 0.3f + (1 - kotlin.math.abs(position)) * 0.7f
+            val scale = 0.9f + (1 - kotlin.math.abs(position)) * 0.1f
             page.scaleX = scale
             page.scaleY = scale
         }
 
         TabLayoutMediator(tabLayout, viewPager) { _, _ -> }.attach()
+
+        updateButtonText(0)
+
+        nextButton.setOnClickListener {
+            val nextIndex = viewPager.currentItem + 1
+            if (nextIndex < adapter.itemCount) {
+                viewPager.currentItem = nextIndex
+            } else {
+                // Последняя страница: сохраняем факт онбординга и переходим дальше
+                prefs.onboardingCompleted = true
+                findNavController().navigate(R.id.homeFragment)
+            }
+        }
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                updateButtonText(position)
+            }
+        })
+    }
+
+    private fun updateButtonText(position: Int) {
+        val isLast = position == adapter.itemCount - 1
+        nextButton.text = if (isLast) {
+            getString(R.string.onboarding_continue)
+        } else {
+            getString(R.string.onboarding_next)
+        }
     }
 }

@@ -31,4 +31,7 @@
 
     <string name="onb_last_title">Перед началом</string>
     <string name="onb_last_consent">Я понимаю, что приложение носит информационный характер и не заменяет консультацию врача</string>
+
+    <string name="onboarding_next">Далее</string>
+    <string name="onboarding_continue">Продолжить</string>
 </resources>
