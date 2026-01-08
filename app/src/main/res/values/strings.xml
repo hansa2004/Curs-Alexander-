@@ -73,4 +73,16 @@
     <string name="home_section_medical_card">Медицинская карта</string>
 
     <string name="home_toast_stub">Раздел в разработке</string>
+
+    <!-- Показатели здоровья: строки -->
+    <string name="measure_type_blood_pressure">Артериальное давление</string>
+    <string name="measure_type_pulse">Пульс</string>
+    <string name="measure_add">Добавить показатель</string>
+    <string name="measure_bp_systolic">Систолическое</string>
+    <string name="measure_bp_diastolic">Диастолическое</string>
+    <string name="measure_pulse">Пульс</string>
+    <string name="measure_comment_optional">Комментарий (необязательно)</string>
+    <string name="measure_save">Сохранить</string>
+
+    <string name="error_invalid_input">Проверьте введённые значения</string>
 </resources>

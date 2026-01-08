@@ -31,4 +31,14 @@
         android:name="com.example.curs_alexander.ui.home.HomeFragment"
         android:label="Home" />
 
+    <fragment
+        android:id="@+id/healthMeasurementsFragment"
+        android:name="com.example.curs_alexander.ui.measurements.HealthMeasurementsFragment"
+        android:label="HealthMeasurements" />
+
+    <fragment
+        android:id="@+id/healthMeasurementAddFragment"
+        android:name="com.example.curs_alexander.ui.measurements.HealthMeasurementAddFragment"
+        android:label="HealthMeasurementAdd" />
+
 </navigation>
