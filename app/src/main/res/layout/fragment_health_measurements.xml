@@ -11,6 +11,13 @@
         android:layout_height="wrap_content"
         android:text="@string/measure_add" />
 
+    <Button
+        android:id="@+id/btnOpenChart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/measure_open_chart" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMeasurements"
         android:layout_width="match_parent"
@@ -19,4 +26,3 @@
         android:paddingTop="8dp" />
 
 </LinearLayout>
-

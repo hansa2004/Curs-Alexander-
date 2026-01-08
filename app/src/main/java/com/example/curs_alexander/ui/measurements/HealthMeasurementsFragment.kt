@@ -39,6 +39,7 @@ class HealthMeasurementsFragment : Fragment() {
 
         val recycler = view.findViewById<RecyclerView>(R.id.rvMeasurements)
         val btnAdd = view.findViewById<Button>(R.id.btnAddMeasurement)
+        val btnChart = view.findViewById<Button>(R.id.btnOpenChart)
 
         recycler.layoutManager = LinearLayoutManager(requireContext())
         adapter = MeasurementsAdapter()
@@ -46,6 +47,10 @@ class HealthMeasurementsFragment : Fragment() {
 
         btnAdd.setOnClickListener {
             findNavController().navigate(R.id.healthMeasurementAddFragment)
+        }
+
+        btnChart.setOnClickListener {
+            findNavController().navigate(R.id.healthMeasurementsChartFragment)
         }
     }
 
@@ -107,4 +112,3 @@ class HealthMeasurementsFragment : Fragment() {
         }
     }
 }
-

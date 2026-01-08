@@ -41,4 +41,9 @@
         android:name="com.example.curs_alexander.ui.measurements.HealthMeasurementAddFragment"
         android:label="HealthMeasurementAdd" />
 
+    <fragment
+        android:id="@+id/healthMeasurementsChartFragment"
+        android:name="com.example.curs_alexander.ui.measurements.HealthMeasurementsChartFragment"
+        android:label="HealthMeasurementsChart" />
+
 </navigation>

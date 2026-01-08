@@ -85,4 +85,8 @@
     <string name="measure_save">Сохранить</string>
 
     <string name="error_invalid_input">Проверьте введённые значения</string>
+    <string name="measure_type_blood_pressure_systolic">Систолическое давление</string>
+    <string name="measure_type_blood_pressure_diastolic">Диастолическое давление</string>
+    <string name="measure_open_chart">Показать динамику</string>
+    <string name="measure_chart_empty">Недостаточно данных для отображения графика</string>
 </resources>
