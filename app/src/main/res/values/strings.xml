@@ -55,4 +55,21 @@
     <string name="profile_error_future_date">Дата рождения не может быть в будущем</string>
     <string name="profile_error_height_invalid">Некорректный рост</string>
     <string name="profile_error_weight_invalid">Некорректный вес</string>
+
+    <string name="home_greeting_placeholder">Здравствуйте</string>
+    <string name="home_today_title">Сегодня</string>
+    <string name="home_today_empty">Напоминаний на сегодня нет</string>
+
+    <string name="home_quick_actions_title">Быстрые действия</string>
+    <string name="home_action_add_measurement">Добавить показатель здоровья</string>
+    <string name="home_action_add_symptom">Добавить симптом</string>
+    <string name="home_action_add_reminder">Добавить напоминание</string>
+
+    <string name="home_sections_title">Разделы приложения</string>
+    <string name="home_section_measurements">Показатели здоровья</string>
+    <string name="home_section_symptoms">Дневник симптомов</string>
+    <string name="home_section_reminders">Напоминания</string>
+    <string name="home_section_medical_card">Медицинская карта</string>
+
+    <string name="home_toast_stub">Раздел в разработке</string>
 </resources>
