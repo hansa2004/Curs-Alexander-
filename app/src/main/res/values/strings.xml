@@ -34,4 +34,25 @@
 
     <string name="onboarding_next">Далее</string>
     <string name="onboarding_continue">Продолжить</string>
+
+    <!-- Анкета: экран профиля -->
+    <string name="profile_title">Перед началом работы</string>
+    <string name="profile_first_name">Имя *</string>
+    <string name="profile_last_name">Фамилия</string>
+    <string name="profile_birth_date">Дата рождения *</string>
+    <string name="profile_gender">Пол *</string>
+    <string name="profile_height">Рост, см</string>
+    <string name="profile_weight">Вес, кг</string>
+    <string name="profile_continue">Продолжить</string>
+
+    <string name="profile_gender_male">Мужской</string>
+    <string name="profile_gender_female">Женский</string>
+    <string name="profile_gender_none">Не указывать</string>
+
+    <string name="profile_error_first_name_required">Введите имя</string>
+    <string name="profile_error_birth_date_required">Выберите дату рождения</string>
+    <string name="profile_error_gender_required">Выберите пол</string>
+    <string name="profile_error_future_date">Дата рождения не может быть в будущем</string>
+    <string name="profile_error_height_invalid">Некорректный рост</string>
+    <string name="profile_error_weight_invalid">Некорректный вес</string>
 </resources>

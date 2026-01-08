@@ -90,9 +90,9 @@ class OnboardingFragment : Fragment() {
             if (nextIndex < adapter.itemCount) {
                 viewPager.currentItem = nextIndex
             } else {
-                // Последняя страница: сохраняем факт онбординга и переходим дальше
+                // Последняя страница: сохраняем факт онбординга и переходим к анкете профиля
                 prefs.onboardingCompleted = true
-                findNavController().navigate(R.id.homeFragment)
+                findNavController().navigate(R.id.action_onboardingFragment_to_profileFragment)
             }
         }
 
