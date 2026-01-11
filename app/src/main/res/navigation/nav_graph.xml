@@ -46,4 +46,18 @@
         android:name="com.example.curs_alexander.ui.measurements.HealthMeasurementsChartFragment"
         android:label="HealthMeasurementsChart" />
 
+    <fragment
+        android:id="@+id/symptomsListFragment"
+        android:name="com.example.curs_alexander.ui.symptoms.SymptomsListFragment"
+        android:label="SymptomsList">
+        <action
+            android:id="@+id/action_symptomsListFragment_to_symptomAddFragment"
+            app:destination="@id/symptomAddFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/symptomAddFragment"
+        android:name="com.example.curs_alexander.ui.symptoms.SymptomAddFragment"
+        android:label="SymptomAdd" />
+
 </navigation>

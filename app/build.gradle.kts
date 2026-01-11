@@ -79,4 +79,7 @@ dependencies {
 
     // RecyclerView (используется для списка динамики показателей)
     implementation("androidx.recyclerview:recyclerview:1.3.1")
+
+    // Gson для простого локального хранения списков в JSON
+    implementation("com.google.code.gson:gson:2.11.0")
 }
