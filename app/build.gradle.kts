@@ -76,4 +76,7 @@ dependencies {
 
     // ViewPager2 for onboarding
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+
+    // RecyclerView (используется для списка динамики показателей)
+    implementation("androidx.recyclerview:recyclerview:1.3.1")
 }

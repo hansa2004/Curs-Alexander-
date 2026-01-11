@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <com.example.curs_alexander.ui.measurements.SimplePressureChartView
-        android:id="@+id/lineChart"
+    <!-- Заменили кастомный Canvas-график на RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerPressure"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
