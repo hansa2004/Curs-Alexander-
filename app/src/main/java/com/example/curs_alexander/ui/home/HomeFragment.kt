@@ -29,6 +29,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private val quickVm: QuickActionsViewModel by viewModels()
+    private val tipsVm: HomeTipsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -125,6 +126,68 @@ class HomeFragment : Fragment() {
                     quickVm.actions.collect { list ->
                         adapter.submit(list)
                     }
+                }
+            }
+        }
+
+        // Рендер карточки "Сегодня" + контекстных подсказок
+        val tvTodayContent = view.findViewById<TextView>(R.id.tvTodayContent)
+        val btnTodayAction = view.findViewById<MaterialButton>(R.id.btnTodayAction)
+
+        val cardHints = view.findViewById<MaterialCardView>(R.id.cardContextHints)
+        val hintsContainer = view.findViewById<ViewGroup>(R.id.containerHints)
+
+        fun renderToday(ui: HomeTipsViewModel.TodayCardUi) {
+            tvTodayContent.text = ui.message
+            val hasAction = ui.actionText != null && ui.actionDestinationId != null
+            if (hasAction) {
+                btnTodayAction.text = ui.actionText
+                btnTodayAction.visibility = View.VISIBLE
+                btnTodayAction.setOnClickListener {
+                    findNavController().navigate(ui.actionDestinationId!!)
+                }
+            } else {
+                btnTodayAction.visibility = View.GONE
+                btnTodayAction.setOnClickListener(null)
+            }
+        }
+
+        fun renderHints(list: List<HomeTipsViewModel.HintUi>) {
+            hintsContainer.removeAllViews()
+            if (list.isEmpty()) {
+                cardHints.visibility = View.GONE
+                return
+            }
+            cardHints.visibility = View.VISIBLE
+
+            val inflater = LayoutInflater.from(hintsContainer.context)
+            list.forEach { hint ->
+                val row = inflater.inflate(R.layout.item_home_hint, hintsContainer, false)
+                val tv = row.findViewById<TextView>(R.id.tvHintText)
+                val btn = row.findViewById<MaterialButton>(R.id.btnHintAction)
+
+                tv.text = hint.message
+                val hasAction = hint.actionText != null && hint.actionDestinationId != null
+                if (hasAction) {
+                    btn.text = hint.actionText
+                    btn.visibility = View.VISIBLE
+                    btn.setOnClickListener { findNavController().navigate(hint.actionDestinationId!!) }
+                } else {
+                    btn.visibility = View.GONE
+                    btn.setOnClickListener(null)
+                }
+
+                hintsContainer.addView(row)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    tipsVm.todayCard.collect { renderToday(it) }
+                }
+                launch {
+                    tipsVm.hints.collect { renderHints(it) }
                 }
             }
         }

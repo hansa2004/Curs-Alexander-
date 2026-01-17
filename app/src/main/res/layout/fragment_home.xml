@@ -78,6 +78,55 @@
                     android:layout_marginTop="8dp"
                     android:text="@string/home_today_empty" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTodayAction"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text=""
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Контекстные подсказки (показываем только при необходимости) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardContextHints"
+            style="@style/Widget.Material3.CardView.Outlined"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvHintsTitle"
+                    style="@style/TextAppearance.Material3.TitleMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Контекстные подсказки" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.BodySmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:text="Нейтральные напоминания для удобства ведения дневника" />
+
+                <LinearLayout
+                    android:id="@+id/containerHints"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp" />
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
