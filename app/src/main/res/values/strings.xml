@@ -115,4 +115,11 @@
 
     <string name="analytics_symptoms_stats_title">Статистика симптомов</string>
     <string name="analytics_symptoms_last_title">Последние записи</string>
+
+    <string name="export_pdf_button">Экспорт данных / Показать врачу</string>
+
+    <string name="medical_card_title">Медицинская карта</string>
+    <string name="medical_card_desc">Здесь можно сформировать отчёт о самоконтроле и показать его врачу/преподавателю.</string>
+    <string name="open_pdf_button">Открыть PDF</string>
+    <string name="share_pdf_button">Отправить / Поделиться</string>
 </resources>

@@ -6,10 +6,18 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnExportPdf"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/export_pdf_button" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp" />
 
     <ProgressBar
         android:id="@+id/progress"
@@ -128,4 +136,3 @@
     </LinearLayout>
 
 </LinearLayout>
-

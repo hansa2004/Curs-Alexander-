@@ -110,7 +110,7 @@ class ProfileFragment : Fragment() {
 
     private fun validateAndSave(): Boolean {
         val firstName = etFirstName.text?.toString()?.trim().orEmpty()
-        // фамилия опциональная и может быть пустой, но поле оставляем
+        val lastName = etLastName.text?.toString()?.trim().orEmpty()
         val birthDate = etBirthDate.text?.toString()?.trim().orEmpty()
         val heightText = etHeight.text?.toString()?.trim().orEmpty()
         val weightText = etWeight.text?.toString()?.trim().orEmpty()
@@ -141,6 +141,8 @@ class ProfileFragment : Fragment() {
         }
 
         prefs.userName = firstName
+        prefs.userLastName = lastName.ifBlank { null }
+        prefs.userBirthDate = birthDate
         prefs.profileCompleted = true
 
         return true

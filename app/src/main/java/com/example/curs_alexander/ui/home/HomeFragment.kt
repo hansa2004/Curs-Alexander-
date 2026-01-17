@@ -48,5 +48,10 @@ class HomeFragment : Fragment() {
         cardReminders.setOnClickListener {
             findNavController().navigate(R.id.remindersFragment)
         }
+
+        val cardMedical = view.findViewById<MaterialCardView>(R.id.cardMedicalCard)
+        cardMedical.setOnClickListener {
+            findNavController().navigate(R.id.medicalCardFragment)
+        }
     }
 }

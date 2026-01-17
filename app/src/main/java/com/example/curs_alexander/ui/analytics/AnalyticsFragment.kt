@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.curs_alexander.R
 import com.example.curs_alexander.data.db.BloodPressureEntity
 import com.example.curs_alexander.data.db.SymptomEntity
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -26,6 +28,7 @@ import java.util.Locale
 class AnalyticsFragment : Fragment() {
 
     private val viewModel: AnalyticsViewModel by viewModels()
+    private val exportViewModel: ExportPdfViewModel by viewModels()
 
     private val df = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
 
@@ -40,6 +43,7 @@ class AnalyticsFragment : Fragment() {
 
         val progress = view.findViewById<ProgressBar>(R.id.progress)
         val tabs = view.findViewById<TabLayout>(R.id.tabs)
+        val btnExport = view.findViewById<MaterialButton>(R.id.btnExportPdf)
 
         val pressureContainer = view.findViewById<View>(R.id.containerPressure)
         val symptomsContainer = view.findViewById<View>(R.id.containerSymptoms)
@@ -120,7 +124,38 @@ class AnalyticsFragment : Fragment() {
             }
         }
 
+        // Состояние экспорта PDF: прогресс/успех/ошибка
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                exportViewModel.uiState.collect { s ->
+                    when (s) {
+                        is ExportPdfUiState.Idle -> {
+                            btnExport.isEnabled = true
+                        }
+                        is ExportPdfUiState.Exporting -> {
+                            btnExport.isEnabled = false
+                            Toast.makeText(requireContext(), "Формирование отчёта...", Toast.LENGTH_SHORT).show()
+                        }
+                        is ExportPdfUiState.Success -> {
+                            btnExport.isEnabled = true
+                            Toast.makeText(requireContext(), "PDF сохранён в 'Загрузки'", Toast.LENGTH_LONG).show()
+                            exportViewModel.consumeResult()
+                        }
+                        is ExportPdfUiState.Error -> {
+                            btnExport.isEnabled = true
+                            Toast.makeText(requireContext(), "Ошибка: ${s.message}", Toast.LENGTH_LONG).show()
+                            exportViewModel.consumeResult()
+                        }
+                    }
+                }
+            }
+        }
+
         viewModel.load()
+
+        btnExport.setOnClickListener {
+            exportViewModel.export()
+        }
     }
 
     private class PressureHistoryAdapter(
@@ -230,4 +265,3 @@ class AnalyticsFragment : Fragment() {
         }
     }
 }
-
