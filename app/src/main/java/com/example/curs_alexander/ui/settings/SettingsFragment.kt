@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.CompoundButton
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -43,20 +44,16 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Внешний вид
         val btnTheme = view.findViewById<MaterialButton>(R.id.btnTheme)
         val btnFont = view.findViewById<MaterialButton>(R.id.btnFont)
 
-        // Уведомления
         switchReminders = view.findViewById(R.id.switchReminders)
         tvTime = view.findViewById(R.id.tvReminderTime)
         val btnPickTime = view.findViewById<MaterialButton>(R.id.btnPickTime)
 
-        // Данные
         val btnClear = view.findViewById<MaterialButton>(R.id.btnClearData)
         val btnExport = view.findViewById<MaterialButton>(R.id.btnExport)
 
-        // О приложении
         view.findViewById<MaterialTextView>(R.id.tvAppName).text = getString(R.string.app_name)
         val versionName = runCatching {
             val pm = requireContext().packageManager
@@ -76,15 +73,18 @@ class SettingsFragment : Fragment() {
 
         btnClear.setOnClickListener { confirmClearData() }
         btnExport.setOnClickListener {
-            // Переход к существующему экспорту PDF (мед. карта)
             findNavController().navigate(R.id.medicalCardFragment)
+        }
+
+        val remindersListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            vm.setRemindersEnabled(isChecked)
+            applyReminderScheduling(isChecked)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     vm.themeMode.collect { mode ->
-                        // Подпись на кнопке
                         btnTheme.text = when (mode) {
                             ThemeMode.LIGHT -> getString(R.string.settings_theme_light)
                             ThemeMode.DARK -> getString(R.string.settings_theme_dark)
@@ -103,17 +103,20 @@ class SettingsFragment : Fragment() {
                 }
                 launch {
                     vm.notifications.collect { n ->
-                        switchReminders.isChecked = n.enabled
+                        // Важно: не триггерим listener на программном обновлении
+                        switchReminders.setOnCheckedChangeListener(null)
+                        if (switchReminders.isChecked != n.enabled) {
+                            switchReminders.isChecked = n.enabled
+                        }
+                        switchReminders.setOnCheckedChangeListener(remindersListener)
+
                         tvTime.text = String.format(Locale.getDefault(), "%02d:%02d", n.hour, n.minute)
                     }
                 }
             }
         }
 
-        switchReminders.setOnCheckedChangeListener { _, isChecked ->
-            vm.setRemindersEnabled(isChecked)
-            applyReminderScheduling(isChecked)
-        }
+        switchReminders.setOnCheckedChangeListener(remindersListener)
     }
 
     private fun showThemeDialog() {
@@ -140,6 +143,7 @@ class SettingsFragment : Fragment() {
                 }
                 vm.setTheme(selected)
                 SettingsApplier.applyTheme(selected)
+                // Не переходим никуда: остаёмся в Settings
                 dialog.dismiss()
             }
             .setNegativeButton(android.R.string.cancel, null)
@@ -169,6 +173,9 @@ class SettingsFragment : Fragment() {
                     else -> FontScale.LARGE
                 }
                 vm.setFont(selected)
+                // Применение размера шрифта сделано в MainActivity.attachBaseContext.
+                // Чтобы UI пересобрался с новым fontScale — пересоздаём Activity.
+                // Навигацию не трогаем, остаёмся в настройках.
                 requireActivity().recreate()
                 dialog.dismiss()
             }

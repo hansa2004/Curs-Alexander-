@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.first
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
+    private lateinit var toolbar: MaterialToolbar
 
     override fun attachBaseContext(newBase: android.content.Context) {
         // Применяем размер шрифта на уровне ресурсов, чтобы влиял на TextView во всём XML UI.
@@ -56,56 +57,37 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val prefs = Prefs(this)
-
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        val graph = navController.navInflater.inflate(R.navigation.nav_graph)
-        val startDest = if (prefs.onboardingCompleted) R.id.homeFragment else R.id.onboardingFragment
-        graph.setStartDestination(startDest)
-        navController.graph = graph
+        // Важно: стартовый граф задаём только при ПЕРВОМ запуске.
+        // При recreate() (например, после смены шрифта) Navigation сам восстановит back stack.
+        if (savedInstanceState == null) {
+            val prefs = Prefs(this)
+            val graph = navController.navInflater.inflate(R.navigation.nav_graph)
+            val startDest = if (prefs.onboardingCompleted) R.id.homeFragment else R.id.onboardingFragment
+            graph.setStartDestination(startDest)
+            navController.graph = graph
+        }
 
-        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        // Меню тулбара (шестерёнка справа)
-        toolbar.menu.clear()
-        toolbar.inflateMenu(R.menu.menu_main)
-        toolbar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_settings -> {
-                    if (navController.currentDestination?.id != R.id.settingsFragment) {
-                        navController.navigate(R.id.settingsFragment)
-                    }
-                    true
-                }
-                else -> false
-            }
-        }
+        // Показываем заголовок в верхней полосе и ставим название приложения.
+        supportActionBar?.setDisplayShowTitleEnabled(true)
+        supportActionBar?.title = getString(R.string.app_name)
+        toolbar.title = getString(R.string.app_name)
 
         setupActionBarWithNavController(navController)
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            supportActionBar?.title = when (destination.id) {
-                R.id.onboardingFragment -> getString(R.string.onboarding_title)
-                R.id.profileFragment -> getString(R.string.profile_title)
-                R.id.homeFragment -> getString(R.string.app_name)
-                R.id.healthMeasurementsFragment -> getString(R.string.home_section_measurements)
-                R.id.healthMeasurementsChartFragment -> getString(R.string.measure_open_chart)
-                R.id.symptomsListFragment -> getString(R.string.home_section_symptoms)
-                R.id.symptomAddFragment -> getString(R.string.home_action_add_symptom)
-                R.id.analysisFragment -> "Анализ"
-                R.id.remindersFragment -> getString(R.string.home_section_reminders)
-                R.id.analyticsFragment -> getString(R.string.analytics_title)
-                R.id.medicalCardFragment -> getString(R.string.medical_card_title)
-                R.id.settingsFragment -> getString(R.string.settings_title)
-                else -> getString(R.string.app_name)
-            }
+        // Тулбар-меню пока не используем (шестерёнка в Home).
+        toolbar.menu.clear()
 
-            // Диагностика: если вдруг шестерёнка не появляется, пробуем ещё раз на всякий случай
-            toolbar.menu.findItem(R.id.action_settings)?.isVisible = true
+        // Держим заголовок стабильным при переходах.
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            supportActionBar?.title = getString(R.string.app_name)
+            toolbar.title = getString(R.string.app_name)
         }
 
         handleNavigationFromIntent(intent)

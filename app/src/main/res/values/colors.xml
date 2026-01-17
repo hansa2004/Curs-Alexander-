@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +8,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Quick actions accents (Material-ish) -->
+    <color name="qa_measurements">#FF2563EB</color> <!-- blue -->
+    <color name="qa_symptoms">#FFDB2777</color> <!-- pink -->
+    <color name="qa_reminders">#FF7C3AED</color> <!-- violet -->
+    <color name="qa_analytics">#FF059669</color> <!-- emerald -->
+    <color name="qa_medical_card">#FFEA580C</color> <!-- orange -->
+    <color name="qa_settings">#FF475569</color> <!-- slate -->
+
+    <color name="qa_tile_surface">#FFFFFFFF</color>
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="quick_actions_all">
+        <item>@string/home_action_add_measurement</item>
+        <item>@string/home_action_add_symptom</item>
+        <item>@string/home_action_add_reminder</item>
+        <item>@string/home_section_measurements</item>
+        <item>@string/home_section_symptoms</item>
+        <item>@string/home_section_reminders</item>
+        <item>@string/analytics_title</item>
+        <item>@string/medical_card_title</item>
+        <item>@string/settings_title</item>
+    </string-array>
+</resources>
+

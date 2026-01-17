@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Curs-Alexander</string>
+    <string name="app_name">USM APPLICATION</string>
     <string name="onboarding_title">Добро пожаловать</string>
     <string name="onboarding_description">Приложение предназначено для поддержки самоконтроля состояния здоровья и носит информационный характер</string>
     <string name="onboarding_name_hint">Ваше имя</string>
@@ -158,4 +158,9 @@
     <string name="home_section_settings">Настройки</string>
 
     <string name="settings_time_placeholder">--:--</string>
+
+    <string name="quick_actions_edit">Редактировать</string>
+    <string name="quick_actions_done">Готово</string>
+    <string name="quick_actions_add">Добавить</string>
+    <string name="quick_actions_hint">Удерживайте плитку для перемещения. Нажмите корзину, чтобы удалить.</string>
 </resources>
