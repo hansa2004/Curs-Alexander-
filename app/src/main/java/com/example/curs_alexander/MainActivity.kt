@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.symptomAddFragment -> getString(R.string.home_action_add_symptom)
                 R.id.analysisFragment -> "Анализ"
                 R.id.remindersFragment -> getString(R.string.home_section_reminders)
+                R.id.analyticsFragment -> getString(R.string.analytics_title)
                 else -> getString(R.string.app_name)
             }
         }

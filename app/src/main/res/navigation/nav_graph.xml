@@ -70,4 +70,9 @@
         android:name="com.example.curs_alexander.ui.reminders.RemindersFragment"
         android:label="Reminders" />
 
+    <fragment
+        android:id="@+id/analyticsFragment"
+        android:name="com.example.curs_alexander.ui.analytics.AnalyticsFragment"
+        android:label="Analytics" />
+
 </navigation>

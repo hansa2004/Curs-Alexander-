@@ -97,4 +97,22 @@
     <string name="reminder_delete">Удалить</string>
     <string name="reminder_type_bp">Измерить давление</string>
     <string name="reminder_type_symptom">Записать симптом</string>
+
+    <!-- Аналитика: строки -->
+    <string name="analytics_title">Аналитика</string>
+    <string name="analytics_tab_pressure">Давление</string>
+    <string name="analytics_tab_symptoms">Симптомы</string>
+
+    <string name="analytics_pressure_title">Сводка за 7 дней</string>
+    <string name="analytics_pressure_history_title">История измерений</string>
+    <string name="analytics_pressure_avg_empty">Среднее за 7 дней: нет данных</string>
+    <string name="analytics_pressure_avg_value">Среднее за 7 дней: %1$d/%2$d</string>
+    <string name="analytics_pressure_last_empty">Последнее измерение: нет данных</string>
+    <string name="analytics_pressure_last_value">Последнее: %1$d/%2$d (%3$s)</string>
+
+    <string name="analytics_pressure_hint_normal">Показатели в пределах нормы (учебная подсказка)</string>
+    <string name="analytics_pressure_hint_high">Показатели выше нормы (учебная подсказка)</string>
+
+    <string name="analytics_symptoms_stats_title">Статистика симптомов</string>
+    <string name="analytics_symptoms_last_title">Последние записи</string>
 </resources>

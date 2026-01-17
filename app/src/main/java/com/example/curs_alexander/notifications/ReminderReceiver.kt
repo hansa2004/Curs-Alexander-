@@ -80,4 +80,3 @@ class ReminderReceiver : BroadcastReceiver() {
         const val EXTRA_DESTINATION_ID = "extra_destination_id"
     }
 }
-

@@ -343,7 +343,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginStart="16dp"
-                        android:text="Анализ / Сводка" />
+                        android:text="@string/analytics_title" />
 
                     <ImageView
                         android:layout_width="24dp"

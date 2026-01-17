@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
 
         val cardAnalysis = view.findViewById<MaterialCardView>(R.id.cardAnalysis)
         cardAnalysis.setOnClickListener {
-            findNavController().navigate(R.id.analysisFragment)
+            findNavController().navigate(R.id.analyticsFragment)
         }
 
         val cardReminders = view.findViewById<MaterialCardView>(R.id.cardReminders)
