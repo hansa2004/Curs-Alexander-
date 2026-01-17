@@ -107,6 +107,8 @@
 
     <string name="home_quick_actions_title">Быстрые действия</string>
     <string name="home_action_add_measurement">Добавить показатель здоровья</string>
+    <string name="home_action_add_pressure">Добавить давление</string>
+    <string name="home_action_add_pulse">Добавить пульс</string>
     <string name="home_action_add_symptom">Добавить симптом</string>
     <string name="home_action_add_reminder">Добавить напоминание</string>
 
@@ -154,8 +156,9 @@
     <string name="analytics_pressure_last_empty">Последнее измерение: нет данных</string>
     <string name="analytics_pressure_last_value">Последнее: %1$d/%2$d (%3$s)</string>
 
-    <string name="analytics_pressure_hint_normal">Показатели в пределах нормы (учебная подсказка)</string>
-    <string name="analytics_pressure_hint_high">Показатели выше нормы (учебная подсказка)</string>
+    <string name="analytics_pressure_hint_within">Показатели за последние 7 дней в пределах заданных вами ориентировочных значений</string>
+    <string name="analytics_pressure_hint_above_user">Есть измерения, которые превышают установленный вами порог</string>
+    <string name="analytics_pressure_hint_below_user">Есть измерения, которые ниже установленного вами порога</string>
 
     <string name="analytics_symptoms_stats_title">Статистика симптомов</string>
     <string name="analytics_symptoms_last_title">Последние записи</string>
@@ -207,6 +210,10 @@
     <string name="quick_actions_done">Готово</string>
     <string name="quick_actions_add">Добавить</string>
     <string name="quick_actions_hint">Удерживайте плитку для перемещения. Нажмите корзину, чтобы удалить.</string>
+
+    <string name="quick_actions_color_title">Цвет карточки</string>
+    <string name="quick_actions_color_reset">Сбросить цвет</string>
+    <string name="quick_actions_color_hint">В режиме редактирования нажмите на карточку, чтобы выбрать цвет</string>
 
     <string name="education_screen_title">Полезная информация</string>
     <string name="education_tap_to_read">Нажмите, чтобы прочитать</string>
@@ -270,5 +277,30 @@
 
 ]]></string>
 
+    <!-- Индивидуальные параметры пользователя -->
+    <string name="user_params_title">Индивидуальные параметры</string>
+    <string name="user_params_desc">Здесь можно задать ориентировочные пороги и возрастную категорию для персонализации аналитики. Параметры используются только для информационных подсказок и сравнения ваших записей.</string>
+
+    <string name="user_params_pressure_thresholds">Ориентировочные пороги давления</string>
+    <string name="user_params_upper_sys">Верхний порог (сист.)</string>
+    <string name="user_params_upper_dia">Верхний порог (диаст.)</string>
+    <string name="user_params_lower_sys">Нижний порог (сист.)</string>
+    <string name="user_params_lower_dia">Нижний порог (диаст.)</string>
+
+    <string name="user_params_age_category">Возрастная категория</string>
+    <string name="user_params_age_category_hint">Выберите категорию</string>
+    <string name="user_params_age_under_30">до 30</string>
+    <string name="user_params_age_30_50">30–50</string>
+    <string name="user_params_age_50_plus">50+</string>
+
+    <string name="user_params_save">Сохранить параметры</string>
+    <string name="user_params_saved">Параметры сохранены</string>
+
+    <string name="settings_user_params">Индивидуальные параметры</string>
+
     <!-- Добавляем дисклеймер в конец всех статей через конкатенацию в UI (см. EducationArticleFragment) -->
+
+    <!-- Предупреждения по пользовательским порогам давления (не медицинская рекомендация) -->
+    <string name="measure_warning_above_user_threshold">Показатель превышает установленный пользователем порог</string>
+    <string name="measure_warning_below_user_threshold">Показатель ниже установленного пользователем порога</string>
 </resources>

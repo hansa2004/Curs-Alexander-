@@ -59,6 +59,7 @@ class SettingsFragment : Fragment() {
         val btnTheme = view.findViewById<MaterialButton>(R.id.btnTheme)
         val btnFont = view.findViewById<MaterialButton>(R.id.btnFont)
         val btnPrivacySecurity = view.findViewById<MaterialButton>(R.id.btnPrivacySecurity)
+        val btnUserParams = view.findViewById<MaterialButton>(R.id.btnUserParams)
 
         switchReminders = view.findViewById(R.id.switchReminders)
         tvTime = view.findViewById(R.id.tvReminderTime)
@@ -91,6 +92,10 @@ class SettingsFragment : Fragment() {
         btnPickTime.setOnClickListener { showTimePicker() }
 
         btnClear?.setOnClickListener { confirmClearData() }
+
+        btnUserParams.setOnClickListener {
+            findNavController().navigate(R.id.userParamsFragment)
+        }
 
         btnPrivacySecurity.setOnClickListener {
             findNavController().navigate(R.id.privacySecurityFragment)

@@ -1,13 +1,16 @@
 package com.example.curs_alexander.ui.home
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.setMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -18,6 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.curs_alexander.R
+import com.example.curs_alexander.ui.home.quickactions.QuickActionColorPalette
 import com.example.curs_alexander.ui.home.quickactions.QuickActionType
 import com.example.curs_alexander.ui.home.quickactions.QuickActionsAdapter
 import com.example.curs_alexander.ui.home.quickactions.QuickActionsTouchHelper
@@ -75,15 +79,26 @@ class HomeFragment : Fragment() {
 
         lateinit var touchHelper: ItemTouchHelper
 
+        var editMode = false
+
         val adapter = QuickActionsAdapter(
             onClick = { action ->
-                findNavController().navigate(action.navDestinationId)
+                if (action.navArgs != null) {
+                    findNavController().navigate(action.navDestinationId, action.navArgs)
+                } else {
+                    findNavController().navigate(action.navDestinationId)
+                }
             },
             onDelete = { pos ->
                 quickVm.removeAt(pos)
             },
             onStartDrag = { vh ->
                 touchHelper.startDrag(vh)
+            },
+            onPickColor = { type ->
+                if (editMode) {
+                    showQuickActionColorDialog(type)
+                }
             }
         )
         recycler.adapter = adapter
@@ -103,6 +118,12 @@ class HomeFragment : Fragment() {
         fun renderEditMode() {
             btnEdit.setText(if (adapter.editMode) R.string.quick_actions_done else R.string.quick_actions_edit)
             tvHint.visibility = if (adapter.editMode) View.VISIBLE else View.GONE
+            editMode = adapter.editMode
+            if (adapter.editMode) {
+                tvHint.text = getString(R.string.quick_actions_color_hint)
+            } else {
+                tvHint.text = getString(R.string.quick_actions_hint)
+            }
         }
 
         btnEdit.setOnClickListener {
@@ -127,6 +148,11 @@ class HomeFragment : Fragment() {
                         adapter.submit(list)
                     }
                 }
+                launch {
+                    quickVm.colors.collect { colors ->
+                        adapter.submitColors(colors)
+                    }
+                }
             }
         }
 
@@ -144,7 +170,7 @@ class HomeFragment : Fragment() {
                 btnTodayAction.text = ui.actionText
                 btnTodayAction.visibility = View.VISIBLE
                 btnTodayAction.setOnClickListener {
-                    findNavController().navigate(ui.actionDestinationId!!)
+                    findNavController().navigate(ui.actionDestinationId)
                 }
             } else {
                 btnTodayAction.visibility = View.GONE
@@ -171,7 +197,7 @@ class HomeFragment : Fragment() {
                 if (hasAction) {
                     btn.text = hint.actionText
                     btn.visibility = View.VISIBLE
-                    btn.setOnClickListener { findNavController().navigate(hint.actionDestinationId!!) }
+                    btn.setOnClickListener { findNavController().navigate(hint.actionDestinationId) }
                 } else {
                     btn.visibility = View.GONE
                     btn.setOnClickListener(null)
@@ -197,9 +223,8 @@ class HomeFragment : Fragment() {
         existing: Set<QuickActionType>,
         onAdd: (QuickActionType) -> Unit
     ) {
-        val all = QuickActionType.values().toList()
+        val all = QuickActionType.entries.toList()
         val available = all
-            .filter { it != QuickActionType.OPEN_SETTINGS }
             .filter { it !in existing }
 
         if (available.isEmpty()) return
@@ -218,6 +243,50 @@ class HomeFragment : Fragment() {
 
         listView.setOnItemClickListener { _, _, position, _ ->
             onAdd(available[position])
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showQuickActionColorDialog(type: QuickActionType) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_quick_action_color, null)
+        val grid = dialogView.findViewById<android.widget.GridLayout>(R.id.grid)
+        val btnReset = dialogView.findViewById<MaterialButton>(R.id.btnReset)
+
+        val sizePx = resources.displayMetrics.density * 36
+        val marginPx = (resources.displayMetrics.density * 6).toInt()
+
+         val dialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.quick_actions_color_title))
+            .setView(dialogView)
+            .setNegativeButton(android.R.string.cancel, null)
+            .create()
+
+        QuickActionColorPalette.colors.forEach { colorInt ->
+            val dot = ImageView(requireContext()).apply {
+                setImageResource(R.drawable.qa_color_dot)
+                imageTintList = ColorStateList.valueOf(colorInt)
+                val lp = android.widget.GridLayout.LayoutParams().apply {
+                    width = sizePx.toInt()
+                    height = sizePx.toInt()
+                    setMargins(marginPx)
+                }
+                layoutParams = lp
+                isClickable = true
+                isFocusable = true
+                setOnClickListener {
+                    quickVm.setColor(type, colorInt)
+                    android.widget.Toast.makeText(requireContext(), "Цвет сохранён", android.widget.Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+            }
+            grid.addView(dot)
+        }
+
+        btnReset.setOnClickListener {
+            quickVm.clearColor(type)
+            android.widget.Toast.makeText(requireContext(), "Цвет сброшен", android.widget.Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
 

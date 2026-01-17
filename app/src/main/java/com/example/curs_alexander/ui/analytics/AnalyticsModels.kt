@@ -4,8 +4,9 @@ import com.example.curs_alexander.data.db.BloodPressureEntity
 import com.example.curs_alexander.data.db.SymptomEntity
 
 enum class PressureHint {
-    NORMAL,
-    HIGH
+    WITHIN_USER_THRESHOLDS,
+    ABOVE_USER_THRESHOLD,
+    BELOW_USER_THRESHOLD
 }
 
 data class PressureSummary(
@@ -28,4 +29,3 @@ data class AnalyticsUiState(
     val symptomLast: List<SymptomEntity> = emptyList(),
     val isLoading: Boolean = true
 )
-

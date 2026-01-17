@@ -14,6 +14,9 @@ class QuickActionsViewModel(app: Application) : AndroidViewModel(app) {
     val actions: StateFlow<List<QuickActionType>> = repo.quickActions
         .stateIn(viewModelScope, SharingStarted.Eagerly, repo.defaultActions())
 
+    val colors: StateFlow<Map<String, Int>> = repo.colors
+        .stateIn(viewModelScope, SharingStarted.Eagerly, emptyMap())
+
     fun move(from: Int, to: Int) {
         val current = actions.value.toMutableList()
         if (from !in current.indices || to !in current.indices) return
@@ -40,8 +43,15 @@ class QuickActionsViewModel(app: Application) : AndroidViewModel(app) {
         save(repo.defaultActions())
     }
 
+    fun setColor(type: QuickActionType, argb: Int) {
+        viewModelScope.launch { repo.setColor(type.id, argb) }
+    }
+
+    fun clearColor(type: QuickActionType) {
+        viewModelScope.launch { repo.clearColor(type.id) }
+    }
+
     private fun save(list: List<QuickActionType>) {
         viewModelScope.launch { repo.setQuickActions(list) }
     }
 }
-

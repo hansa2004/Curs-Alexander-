@@ -25,6 +25,10 @@ import java.util.Calendar
 
 class RemindersFragment : Fragment() {
 
+    companion object {
+        const val ARG_OPEN_ADD_DIALOG = "openAddDialog"
+    }
+
     private val viewModel: RemindersViewModel by viewModels()
 
     override fun onCreateView(
@@ -56,6 +60,12 @@ class RemindersFragment : Fragment() {
 
         btnAdd.setOnClickListener {
             showAddDialog()
+        }
+
+        // Если пришли из quick action — сразу открываем добавление
+        if (arguments?.getBoolean(ARG_OPEN_ADD_DIALOG, false) == true) {
+            // Постим в очередь, чтобы точно после отрисовки/attach
+            view.post { showAddDialog() }
         }
     }
 
@@ -142,4 +152,3 @@ class RemindersFragment : Fragment() {
         }
     }
 }
-

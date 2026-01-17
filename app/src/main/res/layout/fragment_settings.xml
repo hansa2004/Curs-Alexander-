@@ -128,11 +128,19 @@
                     android:text="@string/settings_data_hint" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnPrivacySecurity"
+                    android:id="@+id/btnUserParams"
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
+                    android:text="@string/settings_user_params" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnPrivacySecurity"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:text="@string/privacy_security_title" />
 
                 <com.google.android.material.button.MaterialButton

@@ -5,9 +5,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.curs_alexander.data.db.DbProvider
 import com.example.curs_alexander.data.migrations.LegacyDataMigrator
+import com.example.curs_alexander.userparams.UserParamsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
@@ -16,6 +18,7 @@ class AnalyticsViewModel(app: Application) : AndroidViewModel(app) {
 
     private val db = DbProvider.get(app)
     private val repo = AnalyticsRepository(db.bloodPressureDao(), db.symptomDao())
+    private val userParamsRepo = UserParamsRepository(app)
 
     private val _state = MutableStateFlow(AnalyticsUiState(isLoading = true))
     val state: StateFlow<AnalyticsUiState> = _state.asStateFlow()
@@ -30,7 +33,9 @@ class AnalyticsViewModel(app: Application) : AndroidViewModel(app) {
             val pressures = repo.loadPressureAll().sortedByDescending { it.timestampMillis }
             val symptoms = repo.loadSymptomsAll().sortedByDescending { it.timestampMillis }
 
-            val summary = buildPressureSummary(pressures)
+            val userParams = userParamsRepo.params.first()
+
+            val summary = buildPressureSummary(pressures, userParams)
             val stats = buildSymptomStats(symptoms)
 
             _state.value = AnalyticsUiState(
@@ -43,8 +48,10 @@ class AnalyticsViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    private fun buildPressureSummary(all: List<com.example.curs_alexander.data.db.BloodPressureEntity>): PressureSummary {
-        val now = Calendar.getInstance()
+    private fun buildPressureSummary(
+        all: List<com.example.curs_alexander.data.db.BloodPressureEntity>,
+        userParams: com.example.curs_alexander.userparams.UserParams
+    ): PressureSummary {
         val from = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -7) }.timeInMillis
         val last7d = all.filter { it.timestampMillis >= from }
 
@@ -52,8 +59,19 @@ class AnalyticsViewModel(app: Application) : AndroidViewModel(app) {
         val avgDia = last7d.takeIf { it.isNotEmpty() }?.map { it.diastolic }?.average()?.toInt()
         val last = all.firstOrNull()
 
-        val high = last7d.any { it.systolic > 140 || it.diastolic > 90 }
-        val hint = if (high) PressureHint.HIGH else PressureHint.NORMAL
+        val upperSys = userParams.upperSystolic
+        val upperDia = userParams.upperDiastolic
+        val lowerSys = userParams.lowerSystolic
+        val lowerDia = userParams.lowerDiastolic
+
+        val anyAbove = last7d.any { it.systolic > upperSys || it.diastolic > upperDia }
+        val anyBelow = last7d.any { it.systolic < lowerSys || it.diastolic < lowerDia }
+
+        val hint = when {
+            anyAbove -> PressureHint.ABOVE_USER_THRESHOLD
+            anyBelow -> PressureHint.BELOW_USER_THRESHOLD
+            else -> PressureHint.WITHIN_USER_THRESHOLDS
+        }
 
         return PressureSummary(
             avgSystolic7d = avgSys,
@@ -81,4 +99,3 @@ class AnalyticsViewModel(app: Application) : AndroidViewModel(app) {
             .take(10)
     }
 }
-

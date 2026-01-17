@@ -39,7 +39,12 @@
     <fragment
         android:id="@+id/healthMeasurementAddFragment"
         android:name="com.example.curs_alexander.ui.measurements.HealthMeasurementAddFragment"
-        android:label="HealthMeasurementAdd" />
+        android:label="HealthMeasurementAdd">
+        <argument
+            android:name="initialType"
+            app:argType="string"
+            android:defaultValue="" />
+    </fragment>
 
     <fragment
         android:id="@+id/healthMeasurementsChartFragment"
@@ -68,7 +73,12 @@
     <fragment
         android:id="@+id/remindersFragment"
         android:name="com.example.curs_alexander.ui.reminders.RemindersFragment"
-        android:label="Reminders" />
+        android:label="Reminders">
+        <argument
+            android:name="openAddDialog"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
 
     <fragment
         android:id="@+id/analyticsFragment"
@@ -103,5 +113,10 @@
             android:name="articleId"
             app:argType="string" />
     </fragment>
+
+    <fragment
+        android:id="@+id/userParamsFragment"
+        android:name="com.example.curs_alexander.ui.userparams.UserParamsFragment"
+        android:label="@string/user_params_title" />
 
 </navigation>

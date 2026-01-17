@@ -6,8 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="6dp"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardUseCompatPadding="true"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="@null"
+    app:cardUseCompatPadding="false"
+    app:cardPreventCornerOverlap="false"
     app:cardCornerRadius="18dp"
     app:cardElevation="1dp">
 

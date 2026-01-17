@@ -110,9 +110,15 @@ class AnalyticsFragment : Fragment() {
                             getString(R.string.analytics_pressure_last_value, it.systolic, it.diastolic, dt)
                         } ?: getString(R.string.analytics_pressure_last_empty)
 
+                        // TODO: вернуть на ресурсы:
+                        // R.string.analytics_pressure_hint_within / _above_user / _below_user
                         tvHint.text = when (summary.hint) {
-                            PressureHint.NORMAL -> getString(R.string.analytics_pressure_hint_normal)
-                            PressureHint.HIGH -> getString(R.string.analytics_pressure_hint_high)
+                            PressureHint.WITHIN_USER_THRESHOLDS ->
+                                "Показатели за последние 7 дней в пределах заданных вами ориентировочных значений"
+                            PressureHint.ABOVE_USER_THRESHOLD ->
+                                "Есть измерения, которые превышают установленный вами порог"
+                            PressureHint.BELOW_USER_THRESHOLD ->
+                                "Есть измерения, которые ниже установленного вами порога"
                         }
                     }
                     pressureAdapter.submit(state.pressureHistory)

@@ -3,20 +3,33 @@ package com.example.curs_alexander.ui.home.quickactions
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.core.os.bundleOf
 import com.example.curs_alexander.R
+import com.example.curs_alexander.ui.measurements.HealthMeasurementAddFragment
+import com.example.curs_alexander.ui.reminders.RemindersFragment
 
 /** Доступные типы быстрых действий на главном экране. */
 enum class QuickActionType(
     val id: String,
     val titleRes: Int,
     val navDestinationId: Int,
+    val navArgs: android.os.Bundle? = null,
     @DrawableRes val iconRes: Int,
     @ColorRes val accentColorRes: Int
 ) {
-    ADD_MEASUREMENT(
-        id = "add_measurement",
-        titleRes = R.string.home_action_add_measurement,
+    ADD_PRESSURE(
+        id = "add_pressure",
+        titleRes = R.string.home_action_add_pressure,
         navDestinationId = R.id.healthMeasurementAddFragment,
+        navArgs = bundleOf(HealthMeasurementAddFragment.ARG_INITIAL_TYPE to HealthMeasurementAddFragment.INITIAL_TYPE_BP),
+        iconRes = R.drawable.ic_add_24,
+        accentColorRes = R.color.qa_measurements
+    ),
+    ADD_PULSE(
+        id = "add_pulse",
+        titleRes = R.string.home_action_add_pulse,
+        navDestinationId = R.id.healthMeasurementAddFragment,
+        navArgs = bundleOf(HealthMeasurementAddFragment.ARG_INITIAL_TYPE to HealthMeasurementAddFragment.INITIAL_TYPE_PULSE),
         iconRes = R.drawable.ic_add_24,
         accentColorRes = R.color.qa_measurements
     ),
@@ -31,54 +44,12 @@ enum class QuickActionType(
         id = "add_reminder",
         titleRes = R.string.home_action_add_reminder,
         navDestinationId = R.id.remindersFragment,
+        navArgs = bundleOf(RemindersFragment.ARG_OPEN_ADD_DIALOG to true),
         iconRes = R.drawable.ic_add_24,
         accentColorRes = R.color.qa_reminders
-    ),
-
-    OPEN_MEASUREMENTS(
-        id = "open_measurements",
-        titleRes = R.string.home_section_measurements,
-        navDestinationId = R.id.healthMeasurementsFragment,
-        iconRes = R.drawable.ic_measurements_24,
-        accentColorRes = R.color.qa_measurements
-    ),
-    OPEN_SYMPTOMS(
-        id = "open_symptoms",
-        titleRes = R.string.home_section_symptoms,
-        navDestinationId = R.id.symptomsListFragment,
-        iconRes = R.drawable.ic_symptom_24,
-        accentColorRes = R.color.qa_symptoms
-    ),
-    OPEN_REMINDERS(
-        id = "open_reminders",
-        titleRes = R.string.home_section_reminders,
-        navDestinationId = R.id.remindersFragment,
-        iconRes = R.drawable.ic_reminder_24,
-        accentColorRes = R.color.qa_reminders
-    ),
-    OPEN_ANALYTICS(
-        id = "open_analytics",
-        titleRes = R.string.analytics_title,
-        navDestinationId = R.id.analyticsFragment,
-        iconRes = R.drawable.ic_analytics_24,
-        accentColorRes = R.color.qa_analytics
-    ),
-    OPEN_MEDICAL_CARD(
-        id = "open_medical_card",
-        titleRes = R.string.medical_card_title,
-        navDestinationId = R.id.medicalCardFragment,
-        iconRes = R.drawable.ic_medical_card_24,
-        accentColorRes = R.color.qa_medical_card
-    ),
-    OPEN_SETTINGS(
-        id = "open_settings",
-        titleRes = R.string.settings_title,
-        navDestinationId = R.id.settingsFragment,
-        iconRes = R.drawable.ic_settings_24,
-        accentColorRes = R.color.qa_settings
     );
 
     companion object {
-        fun fromId(id: String): QuickActionType? = values().firstOrNull { it.id == id }
+        fun fromId(id: String): QuickActionType? = entries.firstOrNull { it.id == id }
     }
 }

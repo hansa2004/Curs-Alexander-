@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?attr/colorControlHighlight">
+
+    <!--
+      Важно: ripple без content + маска с белой заливкой может визуально давать "светлый прямоугольник"
+      поверх карточки (особенно при использовании как android:foreground).
+      Поэтому:
+      1) задаём прозрачный content (сам фон не меняется)
+      2) маску оставляем только для формы; цвет маски не должен быть белым
+    -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+
+    <item android:id="@android:id/mask">
+        <shape android:shape="rectangle">
+            <corners android:radius="18dp" />
+            <!-- Цвет маски влияет только на область ripple, но по ошибке может выглядеть как overlay. -->
+            <solid android:color="@android:color/black" />
+        </shape>
+    </item>
+
+</ripple>

@@ -15,11 +15,21 @@ import com.example.curs_alexander.data.HealthMeasurement
 import com.example.curs_alexander.data.HealthMeasurementsStorage
 import com.example.curs_alexander.data.db.BloodPressureEntity
 import com.example.curs_alexander.data.db.DbProvider
+import com.example.curs_alexander.userparams.PressureThresholdsChecker
+import com.example.curs_alexander.userparams.UserParamsRepository
+import java.util.Calendar
+import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Calendar
+import kotlinx.coroutines.flow.first
 
 class HealthMeasurementAddFragment : Fragment() {
+
+    companion object {
+        const val ARG_INITIAL_TYPE = "initialType"
+        const val INITIAL_TYPE_BP = "bp"
+        const val INITIAL_TYPE_PULSE = "pulse"
+    }
 
     private lateinit var storage: HealthMeasurementsStorage
 
@@ -62,8 +72,20 @@ class HealthMeasurementAddFragment : Fragment() {
         etComment = view.findViewById(R.id.etComment)
         btnSave = view.findViewById(R.id.btnSave)
 
+        // Применяем стартовый тип (если передан из quick action)
+        val initial = arguments?.getString(ARG_INITIAL_TYPE).orEmpty()
+        selectedType = when (initial) {
+            INITIAL_TYPE_PULSE -> HealthMeasurement.Type.PULSE
+            INITIAL_TYPE_BP -> HealthMeasurement.Type.BLOOD_PRESSURE
+            else -> selectedType
+        }
+
         setupTypeSpinner()
         setupDateTimePicker()
+
+        // После установки адаптера можем выставить selection спиннера под already-selected type
+        spinnerType.setSelection(if (selectedType == HealthMeasurement.Type.BLOOD_PRESSURE) 0 else 1, false)
+        updateTypeVisibility()
 
         btnSave.setOnClickListener { saveMeasurement() }
     }
@@ -132,6 +154,7 @@ class HealthMeasurementAddFragment : Fragment() {
     private fun updateDateTimeText() {
         val cal = Calendar.getInstance().apply { timeInMillis = selectedDateTimeMillis }
         val text = String.format(
+            Locale.getDefault(),
             "%02d.%02d.%04d %02d:%02d",
             cal.get(Calendar.DAY_OF_MONTH),
             cal.get(Calendar.MONTH) + 1,
@@ -173,6 +196,30 @@ class HealthMeasurementAddFragment : Fragment() {
             )
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                 db.bloodPressureDao().insert(entity)
+            }
+
+            // Новое: предупреждение по пользовательским порогам (только информационная подсказка)
+            viewLifecycleOwner.lifecycleScope.launch {
+                val params = UserParamsRepository(requireContext().applicationContext).params.first()
+                when (PressureThresholdsChecker.check(systolic, diastolic, params)) {
+                    PressureThresholdsChecker.Result.ABOVE_USER_THRESHOLD -> {
+                        // TODO: вернуть на ресурсы: R.string.measure_warning_above_user_threshold
+                        Toast.makeText(
+                            requireContext(),
+                            "Показатель превышает установленный пользователем порог",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    PressureThresholdsChecker.Result.BELOW_USER_THRESHOLD -> {
+                        // TODO: вернуть на ресурсы: R.string.measure_warning_below_user_threshold
+                        Toast.makeText(
+                            requireContext(),
+                            "Показатель ниже установленного пользователем порога",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    PressureThresholdsChecker.Result.WITHIN_USER_THRESHOLDS -> Unit
+                }
             }
         } else {
             val pulseText = etPulse.text?.toString()?.trim().orEmpty()
