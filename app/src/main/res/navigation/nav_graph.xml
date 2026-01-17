@@ -60,4 +60,14 @@
         android:name="com.example.curs_alexander.ui.symptoms.SymptomAddFragment"
         android:label="SymptomAdd" />
 
+    <fragment
+        android:id="@+id/analysisFragment"
+        android:name="com.example.curs_alexander.ui.analysis.AnalysisFragment"
+        android:label="Analysis" />
+
+    <fragment
+        android:id="@+id/remindersFragment"
+        android:name="com.example.curs_alexander.ui.reminders.RemindersFragment"
+        android:label="Reminders" />
+
 </navigation>

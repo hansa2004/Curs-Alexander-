@@ -89,4 +89,12 @@
     <string name="measure_type_blood_pressure_diastolic">Диастолическое давление</string>
     <string name="measure_open_chart">Показать динамику</string>
     <string name="measure_chart_empty">Недостаточно данных для отображения графика</string>
+
+    <!-- Напоминания: строки -->
+    <string name="reminder_add_title">Добавить напоминание</string>
+    <string name="reminder_add_button">Добавить</string>
+    <string name="reminder_enabled">Вкл.</string>
+    <string name="reminder_delete">Удалить</string>
+    <string name="reminder_type_bp">Измерить давление</string>
+    <string name="reminder_type_symptom">Записать симптом</string>
 </resources>

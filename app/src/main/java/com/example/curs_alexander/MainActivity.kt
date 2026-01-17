@@ -1,5 +1,6 @@
 package com.example.curs_alexander
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.enableEdgeToEdge
@@ -52,8 +53,27 @@ class MainActivity : AppCompatActivity() {
                 R.id.healthMeasurementsChartFragment -> getString(R.string.measure_open_chart)
                 R.id.symptomsListFragment -> getString(R.string.home_section_symptoms)
                 R.id.symptomAddFragment -> getString(R.string.home_action_add_symptom)
+                R.id.analysisFragment -> "Анализ"
+                R.id.remindersFragment -> getString(R.string.home_section_reminders)
                 else -> getString(R.string.app_name)
             }
+        }
+
+        handleNavigationFromIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleNavigationFromIntent(intent)
+    }
+
+    private fun handleNavigationFromIntent(intent: Intent?) {
+        val dest = intent?.getIntExtra(
+            com.example.curs_alexander.notifications.ReminderReceiver.EXTRA_DESTINATION_ID,
+            -1
+        ) ?: -1
+        if (dest != -1) {
+            navController.navigate(dest)
         }
     }
 

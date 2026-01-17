@@ -14,11 +14,16 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.curs_alexander.R
+import com.example.curs_alexander.data.db.DbProvider
+import com.example.curs_alexander.data.db.SymptomEntity
 import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -133,6 +138,18 @@ class SymptomAddFragment : Fragment() {
 
         val jsonNew = Gson().toJson(list)
         prefs.edit().putString("items", jsonNew).apply()
+
+        // Новое: сохраняем в Room
+        val db = DbProvider.get(requireContext())
+        val entity = SymptomEntity(
+            timestampMillis = item.timestampMillis,
+            name = item.name,
+            intensity = item.intensity,
+            comment = item.comment
+        )
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            db.symptomDao().insert(entity)
+        }
 
         findNavController().navigateUp()
     }

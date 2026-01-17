@@ -38,5 +38,15 @@ class HomeFragment : Fragment() {
         btnAddSymptom.setOnClickListener {
             findNavController().navigate(R.id.symptomAddFragment)
         }
+
+        val cardAnalysis = view.findViewById<MaterialCardView>(R.id.cardAnalysis)
+        cardAnalysis.setOnClickListener {
+            findNavController().navigate(R.id.analysisFragment)
+        }
+
+        val cardReminders = view.findViewById<MaterialCardView>(R.id.cardReminders)
+        cardReminders.setOnClickListener {
+            findNavController().navigate(R.id.remindersFragment)
+        }
     }
 }

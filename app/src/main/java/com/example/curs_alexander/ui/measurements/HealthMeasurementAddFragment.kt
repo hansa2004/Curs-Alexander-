@@ -8,10 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.curs_alexander.R
 import com.example.curs_alexander.data.HealthMeasurement
 import com.example.curs_alexander.data.HealthMeasurementsStorage
+import com.example.curs_alexander.data.db.BloodPressureEntity
+import com.example.curs_alexander.data.db.DbProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class HealthMeasurementAddFragment : Fragment() {
@@ -157,6 +162,18 @@ class HealthMeasurementAddFragment : Fragment() {
                 comment = etComment.text?.toString()?.trim().orEmpty().ifBlank { null }
             )
             storage.add(item)
+
+            // Новое: сохраняем в Room
+            val db = DbProvider.get(requireContext())
+            val entity = BloodPressureEntity(
+                timestampMillis = item.timestampMillis,
+                systolic = item.systolic,
+                diastolic = item.diastolic,
+                comment = item.comment
+            )
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                db.bloodPressureDao().insert(entity)
+            }
         } else {
             val pulseText = etPulse.text?.toString()?.trim().orEmpty()
             val pulse = pulseText.toIntOrNull()
@@ -176,4 +193,3 @@ class HealthMeasurementAddFragment : Fragment() {
         findNavController().popBackStack()
     }
 }
-
