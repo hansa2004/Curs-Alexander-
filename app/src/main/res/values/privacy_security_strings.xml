@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Экран "Безопасность и конфиденциальность данных" -->
+    <string name="privacy_security_title">Безопасность и конфиденциальность данных</string>
+    <string name="privacy_security_subtitle">Информация о том, как приложение хранит и обрабатывает данные пользователя.</string>
+
+    <string name="privacy_storage_title">Хранение данных</string>
+    <string name="privacy_storage_text">• Все данные хранятся локально на вашем устройстве.\n• Приложение работает без сервера и без подключения к интернету.</string>
+
+    <string name="privacy_confidentiality_title">Конфиденциальность</string>
+    <string name="privacy_confidentiality_text">• Данные не передаются третьим лицам.\n• В приложении отсутствует регистрация и авторизация.</string>
+
+    <string name="privacy_consent_title">Информированное согласие</string>
+    <string name="privacy_consent_text">• Приложение носит информационный характер.\n• Не является медицинским изделием.\n• Не заменяет консультацию врача.</string>
+
+    <string name="privacy_actions_title">Действия</string>
+    <string name="privacy_export">Экспорт данных</string>
+    <string name="privacy_delete_all">Удалить все данные</string>
+    <string name="privacy_delete_hint">Удаление очищает измерения, симптомы и напоминания на этом устройстве. Действие необратимо.</string>
+
+    <string name="privacy_delete_all_title">Удалить все данные?</string>
+    <string name="privacy_delete_all_message">Будут удалены все измерения, симптомы и напоминания. Действие необратимо.</string>
+    <string name="privacy_delete_all_confirm">Удалить</string>
+    <string name="privacy_delete_all_done">Данные удалены</string>
+    <string name="privacy_delete_all_failed">Не удалось удалить данные</string>
+</resources>
+

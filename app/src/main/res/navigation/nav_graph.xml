@@ -85,4 +85,23 @@
         android:name="com.example.curs_alexander.ui.settings.SettingsFragment"
         android:label="Settings" />
 
+    <fragment
+        android:id="@+id/privacySecurityFragment"
+        android:name="com.example.curs_alexander.ui.settings.PrivacySecurityFragment"
+        android:label="Безопасность и конфиденциальность" />
+
+    <fragment
+        android:id="@+id/educationListFragment"
+        android:name="com.example.curs_alexander.ui.education.EducationListFragment"
+        android:label="@string/education_screen_title" />
+
+    <fragment
+        android:id="@+id/educationArticleFragment"
+        android:name="com.example.curs_alexander.ui.education.EducationArticleFragment"
+        android:label="@string/education_screen_title">
+        <argument
+            android:name="articleId"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import android.widget.CompoundButton
+import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.curs_alexander.R
-import com.example.curs_alexander.data.db.DbProvider
+import com.example.curs_alexander.data.AppDataCleaner
 import com.example.curs_alexander.notifications.ReminderAlarmScheduler
 import com.example.curs_alexander.settings.FontScale
 import com.example.curs_alexander.settings.SettingsApplier
@@ -35,6 +36,17 @@ class SettingsFragment : Fragment() {
     private lateinit var switchReminders: MaterialSwitch
     private lateinit var tvTime: MaterialTextView
 
+    private var isClearingData: Boolean = false
+
+    // Добавляем ссылки, чтобы не искать вьюхи повторно и централизовать render
+    private var btnClear: MaterialButton? = null
+    private var progressClear: ProgressBar? = null
+
+    private fun renderDataClearing() {
+        btnClear?.isEnabled = !isClearingData
+        progressClear?.visibility = if (isClearingData) View.VISIBLE else View.GONE
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,13 +58,20 @@ class SettingsFragment : Fragment() {
 
         val btnTheme = view.findViewById<MaterialButton>(R.id.btnTheme)
         val btnFont = view.findViewById<MaterialButton>(R.id.btnFont)
+        val btnPrivacySecurity = view.findViewById<MaterialButton>(R.id.btnPrivacySecurity)
 
         switchReminders = view.findViewById(R.id.switchReminders)
         tvTime = view.findViewById(R.id.tvReminderTime)
         val btnPickTime = view.findViewById<MaterialButton>(R.id.btnPickTime)
+        btnClear = view.findViewById(R.id.btnClearData)
+        progressClear = view.findViewById(R.id.progressClearData)
 
-        val btnClear = view.findViewById<MaterialButton>(R.id.btnClearData)
-        val btnExport = view.findViewById<MaterialButton>(R.id.btnExport)
+        fun renderNotificationsUi(enabled: Boolean) {
+            // Когда напоминания выключены — выбор времени недоступен
+            btnPickTime.isEnabled = enabled
+            tvTime.isEnabled = enabled
+            tvTime.alpha = if (enabled) 1f else 0.5f
+        }
 
         view.findViewById<MaterialTextView>(R.id.tvAppName).text = getString(R.string.app_name)
         val versionName = runCatching {
@@ -71,14 +90,16 @@ class SettingsFragment : Fragment() {
 
         btnPickTime.setOnClickListener { showTimePicker() }
 
-        btnClear.setOnClickListener { confirmClearData() }
-        btnExport.setOnClickListener {
-            findNavController().navigate(R.id.medicalCardFragment)
+        btnClear?.setOnClickListener { confirmClearData() }
+
+        btnPrivacySecurity.setOnClickListener {
+            findNavController().navigate(R.id.privacySecurityFragment)
         }
 
         val remindersListener = CompoundButton.OnCheckedChangeListener { _, isChecked ->
             vm.setRemindersEnabled(isChecked)
             applyReminderScheduling(isChecked)
+            renderNotificationsUi(isChecked)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -111,12 +132,15 @@ class SettingsFragment : Fragment() {
                         switchReminders.setOnCheckedChangeListener(remindersListener)
 
                         tvTime.text = String.format(Locale.getDefault(), "%02d:%02d", n.hour, n.minute)
+                        renderNotificationsUi(n.enabled)
                     }
                 }
             }
         }
 
         switchReminders.setOnCheckedChangeListener(remindersListener)
+        renderDataClearing()
+        renderNotificationsUi(switchReminders.isChecked)
     }
 
     private fun showThemeDialog() {
@@ -220,21 +244,18 @@ class SettingsFragment : Fragment() {
     }
 
     private fun clearAllData() {
+        if (isClearingData) return
+        isClearingData = true
+        renderDataClearing()
+
         viewLifecycleOwner.lifecycleScope.launch {
             val ok = withContext(Dispatchers.IO) {
-                runCatching {
-                    val db = DbProvider.get(requireContext())
-                    // В этой базе нет сгенерированного Room-метода clearAllTables(),
-                    // поэтому чистим таблицы вручную в одной транзакции.
-                    db.runInTransaction {
-                        db.openHelper.writableDatabase.apply {
-                            delete("blood_pressure", null, null)
-                            delete("symptom", null, null)
-                            delete("reminder", null, null)
-                        }
-                    }
-                }.isSuccess
+                runCatching { AppDataCleaner.clearAll(requireContext()) }.isSuccess
             }
+
+            isClearingData = false
+            renderDataClearing()
+
             if (ok) {
                 Toast.makeText(requireContext(), R.string.settings_clear_done, Toast.LENGTH_LONG).show()
             } else {

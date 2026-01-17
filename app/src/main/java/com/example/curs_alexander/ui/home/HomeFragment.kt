@@ -63,6 +63,11 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.settingsFragment)
         }
 
+        // Полезная информация (образовательный модуль)
+        view.findViewById<View?>(R.id.cardEducation)?.setOnClickListener {
+            findNavController().navigate(R.id.educationListFragment)
+        }
+
         // --- Конструктор быстрых действий ---
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerQuickActions)
         recycler.layoutManager = GridLayoutManager(requireContext(), 2)
