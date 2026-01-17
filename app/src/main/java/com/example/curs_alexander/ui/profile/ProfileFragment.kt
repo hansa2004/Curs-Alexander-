@@ -13,6 +13,7 @@ import com.example.curs_alexander.data.Prefs
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import java.util.Calendar
+import java.util.Locale
 
 class ProfileFragment : Fragment() {
 
@@ -23,8 +24,8 @@ class ProfileFragment : Fragment() {
     private lateinit var etBirthDate: TextInputEditText
     private lateinit var etHeight: TextInputEditText
     private lateinit var etWeight: TextInputEditText
-    private lateinit var btnSubmit: MaterialButton
 
+    private lateinit var btnSubmit: MaterialButton
     private lateinit var btnGenderMale: MaterialButton
     private lateinit var btnGenderFemale: MaterialButton
     private lateinit var btnGenderNone: MaterialButton
@@ -54,8 +55,8 @@ class ProfileFragment : Fragment() {
         etBirthDate = view.findViewById(R.id.etBirthDate)
         etHeight = view.findViewById(R.id.etHeight)
         etWeight = view.findViewById(R.id.etWeight)
-        btnSubmit = view.findViewById(R.id.btnSubmitProfile)
 
+        btnSubmit = view.findViewById(R.id.btnSubmitProfile)
         btnGenderMale = view.findViewById(R.id.btnGenderMale)
         btnGenderFemale = view.findViewById(R.id.btnGenderFemale)
         btnGenderNone = view.findViewById(R.id.btnGenderNone)
@@ -85,7 +86,7 @@ class ProfileFragment : Fragment() {
                 if (selectedCal.after(now)) {
                     Toast.makeText(requireContext(), R.string.profile_error_future_date, Toast.LENGTH_SHORT).show()
                 } else {
-                    val formatted = String.format("%02d.%02d.%04d", d, m + 1, y)
+                    val formatted = String.format(Locale.getDefault(), "%02d.%02d.%04d", d, m + 1, y)
                     etBirthDate.setText(formatted)
                 }
             }, year, month, day)
@@ -97,7 +98,6 @@ class ProfileFragment : Fragment() {
     private fun setupGenderButtons() {
         fun updateSelection(gender: Gender) {
             selectedGender = gender
-
             btnGenderMale.isSelected = (gender == Gender.MALE)
             btnGenderFemale.isSelected = (gender == Gender.FEMALE)
             btnGenderNone.isSelected = (gender == Gender.NONE)
@@ -110,7 +110,7 @@ class ProfileFragment : Fragment() {
 
     private fun validateAndSave(): Boolean {
         val firstName = etFirstName.text?.toString()?.trim().orEmpty()
-        val lastName = etLastName.text?.toString()?.trim().orEmpty()
+        // фамилия опциональная и может быть пустой, но поле оставляем
         val birthDate = etBirthDate.text?.toString()?.trim().orEmpty()
         val heightText = etHeight.text?.toString()?.trim().orEmpty()
         val weightText = etWeight.text?.toString()?.trim().orEmpty()

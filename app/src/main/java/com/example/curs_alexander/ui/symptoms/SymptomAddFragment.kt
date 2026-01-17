@@ -2,7 +2,9 @@ package com.example.curs_alexander.ui.symptoms
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.curs_alexander.R
+import com.google.android.material.chip.Chip
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
@@ -28,6 +31,10 @@ class SymptomAddFragment : Fragment() {
     private lateinit var tvDateTime: TextView
     private lateinit var etComment: EditText
     private lateinit var btnSave: Button
+    private lateinit var chipHeadache: Chip
+    private lateinit var chipFatigue: Chip
+    private lateinit var chipNausea: Chip
+    private lateinit var chipStomachPain: Chip
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +52,10 @@ class SymptomAddFragment : Fragment() {
         tvDateTime = view.findViewById(R.id.tvDateTime)
         etComment = view.findViewById(R.id.etComment)
         btnSave = view.findViewById(R.id.btnSave)
+        chipHeadache = view.findViewById(R.id.chipHeadache)
+        chipFatigue = view.findViewById(R.id.chipFatigue)
+        chipNausea = view.findViewById(R.id.chipNausea)
+        chipStomachPain = view.findViewById(R.id.chipStomachPain)
 
         val now = Date()
         val formatter = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
@@ -61,15 +72,34 @@ class SymptomAddFragment : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        // Валидация названия: включаем кнопку, только если поле не пустое
+        etName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                btnSave.isEnabled = !s.isNullOrBlank()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        // Шаблоны симптомов: подстановка текста в поле названия
+        val templateClickListener = View.OnClickListener { chipView ->
+            val text = (chipView as Chip).text.toString()
+            etName.setText(text)
+            etName.setSelection(text.length)
+        }
+        chipHeadache.setOnClickListener(templateClickListener)
+        chipFatigue.setOnClickListener(templateClickListener)
+        chipNausea.setOnClickListener(templateClickListener)
+        chipStomachPain.setOnClickListener(templateClickListener)
+
         btnSave.setOnClickListener {
             saveSymptom()
         }
     }
 
     private fun updateIntensityLabel() {
-        // SeekBar max = 4, так что интенсивность = progress + 1
-        val value = seekIntensity.progress + 1
-        tvIntensityValue.text = "Интенсивность: $value"
+        val value = seekIntensity.progress + 1 // 1..5
+        tvIntensityValue.text = "Интенсивность: $value из 5"
     }
 
     private fun saveSymptom() {
@@ -107,4 +137,3 @@ class SymptomAddFragment : Fragment() {
         findNavController().navigateUp()
     }
 }
-
