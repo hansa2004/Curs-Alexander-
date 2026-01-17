@@ -28,11 +28,10 @@ class ProfileFragment : Fragment() {
     private lateinit var btnSubmit: MaterialButton
     private lateinit var btnGenderMale: MaterialButton
     private lateinit var btnGenderFemale: MaterialButton
-    private lateinit var btnGenderNone: MaterialButton
 
     private var selectedGender: Gender? = null
 
-    private enum class Gender { MALE, FEMALE, NONE }
+    private enum class Gender { MALE, FEMALE }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +58,6 @@ class ProfileFragment : Fragment() {
         btnSubmit = view.findViewById(R.id.btnSubmitProfile)
         btnGenderMale = view.findViewById(R.id.btnGenderMale)
         btnGenderFemale = view.findViewById(R.id.btnGenderFemale)
-        btnGenderNone = view.findViewById(R.id.btnGenderNone)
 
         setupBirthDatePicker()
         setupGenderButtons()
@@ -96,16 +94,49 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupGenderButtons() {
+        val primary = com.google.android.material.color.MaterialColors.getColor(
+            requireView(),
+            com.google.android.material.R.attr.colorPrimary
+        )
+        val onPrimary = com.google.android.material.color.MaterialColors.getColor(
+            requireView(),
+            com.google.android.material.R.attr.colorOnPrimary
+        )
+        val outline = com.google.android.material.color.MaterialColors.getColor(
+            requireView(),
+            com.google.android.material.R.attr.colorOutline
+        )
+
+        fun setFilled(button: MaterialButton) {
+            button.strokeWidth = 0
+            button.backgroundTintList = android.content.res.ColorStateList.valueOf(primary)
+            button.setTextColor(onPrimary)
+        }
+
+        fun setOutlined(button: MaterialButton) {
+            button.strokeWidth = resources.getDimensionPixelSize(com.google.android.material.R.dimen.m3_btn_stroke_size)
+            button.strokeColor = android.content.res.ColorStateList.valueOf(outline)
+            button.backgroundTintList = android.content.res.ColorStateList.valueOf(android.graphics.Color.TRANSPARENT)
+            button.setTextColor(primary)
+        }
+
         fun updateSelection(gender: Gender) {
             selectedGender = gender
-            btnGenderMale.isSelected = (gender == Gender.MALE)
-            btnGenderFemale.isSelected = (gender == Gender.FEMALE)
-            btnGenderNone.isSelected = (gender == Gender.NONE)
+            if (gender == Gender.MALE) {
+                setFilled(btnGenderMale)
+                setOutlined(btnGenderFemale)
+            } else {
+                setFilled(btnGenderFemale)
+                setOutlined(btnGenderMale)
+            }
         }
+
+        // Стартовое состояние: обе outlined
+        setOutlined(btnGenderMale)
+        setOutlined(btnGenderFemale)
 
         btnGenderMale.setOnClickListener { updateSelection(Gender.MALE) }
         btnGenderFemale.setOnClickListener { updateSelection(Gender.FEMALE) }
-        btnGenderNone.setOnClickListener { updateSelection(Gender.NONE) }
     }
 
     private fun validateAndSave(): Boolean {
