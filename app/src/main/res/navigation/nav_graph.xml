@@ -80,4 +80,9 @@
         android:name="com.example.curs_alexander.ui.medicalcard.MedicalCardFragment"
         android:label="MedicalCard" />
 
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.curs_alexander.ui.settings.SettingsFragment"
+        android:label="Settings" />
+
 </navigation>

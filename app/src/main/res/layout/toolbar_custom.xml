@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Заголовок оставляем стандартный через app:title в MaterialToolbar -->
+
+    <ImageButton
+        android:id="@+id/btnToolbarSettings"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="end"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/settings_title"
+        android:padding="8dp"
+        app:srcCompat="@drawable/ic_settings_24"
+        app:tint="?attr/colorOnSurface" />
+
+</merge>
+

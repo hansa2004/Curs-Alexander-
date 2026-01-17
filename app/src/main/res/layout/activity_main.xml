@@ -12,7 +12,10 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         android:elevation="4dp"
-        app:title="@string/app_name" />
+        app:title="@string/app_name"
+        app:titleTextColor="?attr/colorOnSurface"
+        app:subtitleTextColor="?attr/colorOnSurface"
+        app:navigationIconTint="?attr/colorOnSurface" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"

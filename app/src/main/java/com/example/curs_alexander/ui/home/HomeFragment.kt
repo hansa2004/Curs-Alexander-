@@ -53,5 +53,7 @@ class HomeFragment : Fragment() {
         cardMedical.setOnClickListener {
             findNavController().navigate(R.id.medicalCardFragment)
         }
+
+        // Настройки открываются из шестерёнки в правом верхнем углу (тулбар)
     }
 }

@@ -176,7 +176,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_foreground"
-                        android:tint="?attr/colorPrimary" />
+                        app:tint="?attr/colorPrimary"
+                        android:contentDescription="@null" />
 
                     <TextView
                         style="@style/TextAppearance.Material3.BodyLarge"
@@ -190,7 +191,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_background"
-                        android:tint="?attr/colorOutline" />
+                        app:tint="?attr/colorOutline"
+                        android:contentDescription="@null" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -216,7 +218,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_foreground"
-                        android:tint="?attr/colorPrimary" />
+                        app:tint="?attr/colorPrimary"
+                        android:contentDescription="@null" />
 
                     <TextView
                         style="@style/TextAppearance.Material3.BodyLarge"
@@ -230,7 +233,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_background"
-                        android:tint="?attr/colorOutline" />
+                        app:tint="?attr/colorOutline"
+                        android:contentDescription="@null" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -256,7 +260,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_foreground"
-                        android:tint="?attr/colorPrimary" />
+                        app:tint="?attr/colorPrimary"
+                        android:contentDescription="@null" />
 
                     <TextView
                         style="@style/TextAppearance.Material3.BodyLarge"
@@ -270,7 +275,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_background"
-                        android:tint="?attr/colorOutline" />
+                        app:tint="?attr/colorOutline"
+                        android:contentDescription="@null" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -295,7 +301,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_foreground"
-                        android:tint="?attr/colorPrimary" />
+                        app:tint="?attr/colorPrimary"
+                        android:contentDescription="@null" />
 
                     <TextView
                         style="@style/TextAppearance.Material3.BodyLarge"
@@ -309,7 +316,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_background"
-                        android:tint="?attr/colorOutline" />
+                        app:tint="?attr/colorOutline"
+                        android:contentDescription="@null" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -335,7 +343,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_foreground"
-                        android:tint="?attr/colorPrimary" />
+                        app:tint="?attr/colorPrimary"
+                        android:contentDescription="@null" />
 
                     <TextView
                         style="@style/TextAppearance.Material3.BodyLarge"
@@ -349,7 +358,8 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_launcher_background"
-                        android:tint="?attr/colorOutline" />
+                        app:tint="?attr/colorOutline"
+                        android:contentDescription="@null" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

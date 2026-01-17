@@ -122,4 +122,40 @@
     <string name="medical_card_desc">Здесь можно сформировать отчёт о самоконтроле и показать его врачу/преподавателю.</string>
     <string name="open_pdf_button">Открыть PDF</string>
     <string name="share_pdf_button">Отправить / Поделиться</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+
+    <string name="settings_section_appearance">Внешний вид</string>
+    <string name="settings_theme_title">Тема приложения</string>
+    <string name="settings_theme_light">Светлая</string>
+    <string name="settings_theme_dark">Тёмная</string>
+    <string name="settings_theme_system">Системная</string>
+
+    <string name="settings_font_title">Размер шрифта</string>
+    <string name="settings_font_small">Маленький</string>
+    <string name="settings_font_medium">Средний</string>
+    <string name="settings_font_large">Крупный</string>
+
+    <string name="settings_section_notifications">Уведомления</string>
+    <string name="settings_reminders_enabled">Напоминания</string>
+    <string name="settings_pick_time">Выбрать время</string>
+
+    <string name="settings_section_data">Данные</string>
+    <string name="settings_data_hint">Все данные хранятся локально на устройстве. Вы можете выгрузить отчёт в PDF или очистить данные.</string>
+    <string name="settings_export">Экспорт данных (PDF)</string>
+    <string name="settings_clear">Очистить данные</string>
+    <string name="settings_clear_title">Очистка данных</string>
+    <string name="settings_clear_message">Удалить все измерения, симптомы и напоминания? Действие необратимо.</string>
+    <string name="settings_clear_confirm">Очистить</string>
+    <string name="settings_clear_done">Данные очищены</string>
+    <string name="settings_clear_failed">Не удалось очистить данные</string>
+
+    <string name="settings_section_about">О приложении</string>
+    <string name="settings_about_desc">Приложение предназначено для ведения дневника самоконтроля: давление, симптомы и простая аналитика.</string>
+    <string name="settings_about_disclaimer">Приложение носит информационный характер и не является медицинским изделием.</string>
+
+    <string name="home_section_settings">Настройки</string>
+
+    <string name="settings_time_placeholder">--:--</string>
 </resources>
