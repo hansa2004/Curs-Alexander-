@@ -301,8 +301,10 @@ class HomeFragment : Fragment() {
         grid.removeAllViews()
         QuickActionColorPalette.colors.forEach { colorInt ->
             val dot = ImageView(requireContext()).apply {
-                setImageResource(R.drawable.qa_color_dot)
-                imageTintList = ColorStateList.valueOf(colorInt)
+                // qa_color_dot — это shape (oval) с прозрачной заливкой, поэтому его нужно тинтить как background
+                setBackgroundResource(R.drawable.qa_color_dot)
+                backgroundTintList = ColorStateList.valueOf(colorInt)
+
                 val lp = android.widget.GridLayout.LayoutParams().apply {
                     width = sizePx.toInt()
                     height = sizePx.toInt()

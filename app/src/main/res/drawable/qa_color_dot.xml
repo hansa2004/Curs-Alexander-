@@ -6,8 +6,9 @@
         android:width="40dp"
         android:height="40dp" />
 
-    <!-- Базовый цвет пусть будет прозрачным, дальше мы красим через backgroundTintList -->
-    <solid android:color="@android:color/transparent" />
+    <!-- Базовая заливка: непрозрачная, чтобы круг всегда рисовался.
+         Дальше мы перекрашиваем его через backgroundTintList программно. -->
+    <solid android:color="@android:color/white" />
 
     <!-- Лёгкая обводка, чтобы круг не "терялся" на светлых фонах -->
     <stroke
