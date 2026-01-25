@@ -201,13 +201,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardMeasurements"
-                style="@style/Widget.Material3.CardView.Outlined"
+                style="@style/Widget.App.Card.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/app_card_spacing"
                 android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless">
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -243,13 +242,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardSymptoms"
-                style="@style/Widget.Material3.CardView.Outlined"
+                style="@style/Widget.App.Card.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/app_card_spacing"
                 android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless">
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -285,13 +283,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardReminders"
-                style="@style/Widget.Material3.CardView.Outlined"
+                style="@style/Widget.App.Card.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/app_card_spacing"
                 android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless">
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -327,12 +324,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardMedicalCard"
-                style="@style/Widget.Material3.CardView.Outlined"
+                style="@style/Widget.App.Card.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/app_card_spacing"
                 android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless">
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -368,13 +365,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardAnalysis"
-                style="@style/Widget.Material3.CardView.Outlined"
+                style="@style/Widget.App.Card.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/app_card_spacing"
                 android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless">
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -410,10 +406,11 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardEducation"
-                style="@style/Widget.Material3.CardView.Outlined"
+                style="@style/Widget.App.Card.Outlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
                 android:clickable="true"
                 android:focusable="true">
 

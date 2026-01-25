@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ночной вариант вторичного текста (повышенный контраст) -->
+    <color name="app_text_secondary_light">@color/app_text_secondary_dark</color>
+</resources>
+

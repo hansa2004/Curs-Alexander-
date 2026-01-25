@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:padding="16dp">
+    android:padding="@dimen/app_screen_padding">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,10 +12,10 @@
 
         <!-- Внешний вид -->
         <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Material3.CardView.Outlined"
+            style="@style/Widget.App.Card.Outlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="@dimen/app_card_spacing">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -50,10 +50,10 @@
 
         <!-- Уведомления -->
         <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Material3.CardView.Outlined"
+            style="@style/Widget.App.Card.Outlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="@dimen/app_card_spacing">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,10 +103,10 @@
 
         <!-- Данные -->
         <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Material3.CardView.Outlined"
+            style="@style/Widget.App.Card.Outlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="@dimen/app_card_spacing">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -181,7 +181,7 @@
 
         <!-- О приложении -->
         <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Material3.CardView.Outlined"
+            style="@style/Widget.App.Card.Outlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

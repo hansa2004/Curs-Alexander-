@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Единые отступы/радиусы для карточек и списков, чтобы не "сливались" обводки -->
+    <dimen name="app_screen_padding">16dp</dimen>
+    <dimen name="app_card_radius">16dp</dimen>
+    <dimen name="app_card_spacing">12dp</dimen>
+    <dimen name="app_card_inner_padding">16dp</dimen>
+</resources>
+

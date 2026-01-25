@@ -5,5 +5,34 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
-</resources>
 
+    <!-- Единый стиль для обводных карточек (Outlined), чтобы обводки выглядели одинаково и не "сливались" -->
+    <style name="Widget.App.Card.Outlined" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">@dimen/app_card_radius</item>
+        <item name="cardUseCompatPadding">false</item>
+        <item name="cardPreventCornerOverlap">true</item>
+
+        <!-- Убираем любые 'подъёмы' и анимации состояния: они часто дают артефакты обводки при скролле -->
+        <item name="cardElevation">0dp</item>
+        <item name="android:stateListAnimator">@null</item>
+
+        <!-- Риппл поверх, без имитации второй рамки -->
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+
+        <!-- Явно фиксируем обводку -->
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+    </style>
+
+    <style name="Widget.App.Card.Elevated" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/app_card_radius</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardPreventCornerOverlap">true</item>
+
+        <!-- Чтобы не было 'плавающих' краёв/теней при скролле -->
+        <item name="android:stateListAnimator">@null</item>
+
+        <!-- Контролируемая небольшая elevation для 'elevated' карточек -->
+        <item name="cardElevation">2dp</item>
+    </style>
+</resources>
