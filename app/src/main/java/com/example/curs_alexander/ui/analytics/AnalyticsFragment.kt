@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.curs_alexander.R
-import com.example.curs_alexander.data.db.BloodPressureEntity
+import com.example.curs_alexander.data.db.BloodPressureWithContext
 import com.example.curs_alexander.data.db.SymptomEntity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.tabs.TabLayout
@@ -118,15 +118,13 @@ class AnalyticsFragment : Fragment() {
                             getString(R.string.analytics_pressure_last_value, it.systolic, it.diastolic, dt)
                         } ?: getString(R.string.analytics_pressure_last_empty)
 
-                        // TODO: вернуть на ресурсы:
-                        // R.string.analytics_pressure_hint_within / _above_user / _below_user
                         tvHint.text = when (summary.hint) {
                             PressureHint.WITHIN_USER_THRESHOLDS ->
-                                "Показатели за последние 7 дней в пределах заданных вами ориентировочных значений"
+                                getString(R.string.analytics_pressure_hint_within)
                             PressureHint.ABOVE_USER_THRESHOLD ->
-                                "Есть измерения, которые превышают установленный вами порог"
+                                getString(R.string.analytics_pressure_hint_above_user)
                             PressureHint.BELOW_USER_THRESHOLD ->
-                                "Есть измерения, которые ниже установленного вами порога"
+                                getString(R.string.analytics_pressure_hint_below_user)
                         }
                     }
 
@@ -180,9 +178,9 @@ class AnalyticsFragment : Fragment() {
         private val df: SimpleDateFormat
     ) : RecyclerView.Adapter<PressureHistoryAdapter.VH>() {
 
-        private val items = mutableListOf<BloodPressureEntity>()
+        private val items = mutableListOf<BloodPressureWithContext>()
 
-        fun submit(list: List<BloodPressureEntity>) {
+        fun submit(list: List<BloodPressureWithContext>) {
             items.clear()
             items.addAll(list)
             notifyDataSetChanged()
@@ -203,9 +201,41 @@ class AnalyticsFragment : Fragment() {
             private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
             private val tvSubtitle: TextView = itemView.findViewById(R.id.tvSubtitle)
 
-            fun bind(item: BloodPressureEntity) {
-                tvTitle.text = "${item.systolic}/${item.diastolic}"
-                tvSubtitle.text = df.format(Date(item.timestampMillis))
+            fun bind(item: BloodPressureWithContext) {
+                tvTitle.text = "${item.bp.systolic}/${item.bp.diastolic}"
+
+                val dt = df.format(Date(item.bp.timestampMillis))
+                val ctxText = formatContext(item, itemView.context)
+                tvSubtitle.text = if (ctxText.isNullOrBlank()) {
+                    dt
+                } else {
+                    "$dt • $ctxText"
+                }
+            }
+
+            private fun formatContext(item: BloodPressureWithContext, context: android.content.Context): String? {
+                val parts = mutableListOf<String>()
+
+                val time = when (item.timeOfDay) {
+                    "morning" -> context.getString(R.string.measure_context_time_morning)
+                    "day" -> context.getString(R.string.measure_context_time_day)
+                    "evening" -> context.getString(R.string.measure_context_time_evening)
+                    else -> null
+                }
+                if (!time.isNullOrBlank()) parts.add(time)
+
+                val state = when (item.state) {
+                    "rest" -> context.getString(R.string.measure_context_state_rest)
+                    "after_load" -> context.getString(R.string.measure_context_state_after_load)
+                    "after_stress" -> context.getString(R.string.measure_context_state_after_stress)
+                    else -> null
+                }
+                if (!state.isNullOrBlank()) parts.add(state)
+
+                val comment = item.contextComment?.trim().orEmpty().ifBlank { null }
+                if (!comment.isNullOrBlank()) parts.add(comment)
+
+                return parts.takeIf { it.isNotEmpty() }?.joinToString(", ")
             }
         }
     }
@@ -274,11 +304,8 @@ class AnalyticsFragment : Fragment() {
             fun bind(item: SymptomEntity) {
                 tvTitle.text = item.name
                 val dt = df.format(Date(item.timestampMillis))
-                tvSubtitle.text = if (item.intensity != null) {
-                    "Интенсивность: ${item.intensity}, $dt"
-                } else {
-                    dt
-                }
+                val comment = item.comment?.trim().orEmpty().ifBlank { null }
+                tvSubtitle.text = if (comment == null) dt else "$dt • $comment"
             }
         }
     }

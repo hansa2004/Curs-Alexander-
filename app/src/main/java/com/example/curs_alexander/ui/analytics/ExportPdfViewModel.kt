@@ -8,6 +8,8 @@ import com.example.curs_alexander.export.ExportNotification
 import com.example.curs_alexander.export.PdfReportGenerator
 import com.example.curs_alexander.export.PdfReportRepository
 import com.example.curs_alexander.export.PdfStorage
+import com.example.curs_alexander.export.PdfTextSize
+import com.example.curs_alexander.settings.SettingsCache
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +30,7 @@ class ExportPdfViewModel(app: Application) : AndroidViewModel(app) {
     private val _uiState = MutableStateFlow<ExportPdfUiState>(ExportPdfUiState.Idle)
     val uiState: StateFlow<ExportPdfUiState> = _uiState.asStateFlow()
 
-    fun export() {
+    fun export(textSize: PdfTextSize? = null) {
         // защита от двойных нажатий
         if (_uiState.value is ExportPdfUiState.Exporting) return
 
@@ -36,7 +38,12 @@ class ExportPdfViewModel(app: Application) : AndroidViewModel(app) {
             _uiState.value = ExportPdfUiState.Exporting
             try {
                 val data = repo.loadReportData()
-                val pdf = generator.generate(data)
+
+                val size = textSize
+                    ?: SettingsCache.getPdfTextSize(getApplication())
+                    ?: PdfTextSize.NORMAL
+
+                val pdf = generator.generate(data, size)
 
                 val fileName = "health_report_${System.currentTimeMillis()}.pdf"
                 val uri = PdfStorage.saveToDownloads(getApplication(), fileName) { out ->

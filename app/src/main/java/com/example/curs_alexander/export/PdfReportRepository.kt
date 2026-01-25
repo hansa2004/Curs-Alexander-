@@ -35,6 +35,10 @@ class PdfReportRepository(private val context: Context) {
         )
 
         val pressuresAll = db.bloodPressureDao().getFrom(0).sortedByDescending { it.timestampMillis }
+        val pressuresWithContextAll = db.bloodPressureDao()
+            .getAllWithContext()
+            .sortedByDescending { it.bp.timestampMillis }
+
         val symptomsAll = db.symptomDao().getFrom(0).sortedByDescending { it.timestampMillis }
 
         val periodText = buildPeriodText(pressuresAll, symptomsAll)
@@ -82,6 +86,7 @@ class PdfReportRepository(private val context: Context) {
             lastPressure = lastPressure,
             avgPressure7d = avg7d,
             pressures = pressuresAll.take(200),
+            pressureWithContext = pressuresWithContextAll.take(200),
             symptoms = symptomsAll.take(200),
             symptomStatsLines = symptomStatsLines,
             totalPressureCount = pressuresAll.size,

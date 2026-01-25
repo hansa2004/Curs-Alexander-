@@ -1,6 +1,7 @@
 package com.example.curs_alexander.ui.analytics
 
 import com.example.curs_alexander.data.db.BloodPressureEntity
+import com.example.curs_alexander.data.db.BloodPressureWithContext
 import com.example.curs_alexander.data.db.SymptomEntity
 
 enum class PressureHint {
@@ -24,7 +25,7 @@ data class SymptomStats(
 
 data class AnalyticsUiState(
     val pressureSummary: PressureSummary? = null,
-    val pressureHistory: List<BloodPressureEntity> = emptyList(),
+    val pressureHistory: List<BloodPressureWithContext> = emptyList(),
     val symptomStats: List<SymptomStats> = emptyList(),
     val symptomLast: List<SymptomEntity> = emptyList(),
     val isLoading: Boolean = true

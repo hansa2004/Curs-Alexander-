@@ -12,9 +12,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.curs_alexander.R
+import com.example.curs_alexander.export.PdfTextSize
+import com.example.curs_alexander.settings.SettingsCache
 import com.example.curs_alexander.ui.analytics.ExportPdfUiState
 import com.example.curs_alexander.ui.analytics.ExportPdfViewModel
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.radiobutton.MaterialRadioButton
 import kotlinx.coroutines.launch
 
 /**
@@ -43,10 +46,29 @@ class MedicalCardFragment : Fragment() {
         val btnOpen = view.findViewById<MaterialButton>(R.id.btnOpenPdf)
         val btnShare = view.findViewById<MaterialButton>(R.id.btnSharePdf)
 
+        val rbNormal = view.findViewById<MaterialRadioButton>(R.id.rbPdfTextNormal)
+        val rbLarge = view.findViewById<MaterialRadioButton>(R.id.rbPdfTextLarge)
+
+        // Применяем сохранённый выбор
+        val saved = SettingsCache.getPdfTextSize(requireContext()) ?: PdfTextSize.NORMAL
+        rbNormal.isChecked = saved == PdfTextSize.NORMAL
+        rbLarge.isChecked = saved == PdfTextSize.LARGE
+
+        fun currentSize(): PdfTextSize {
+            return if (rbLarge.isChecked) PdfTextSize.LARGE else PdfTextSize.NORMAL
+        }
+
+        rbNormal.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) SettingsCache.setPdfTextSize(requireContext(), PdfTextSize.NORMAL)
+        }
+        rbLarge.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) SettingsCache.setPdfTextSize(requireContext(), PdfTextSize.LARGE)
+        }
+
         btnOpen.isEnabled = false
         btnShare.isEnabled = false
 
-        btnExport.setOnClickListener { exportViewModel.export() }
+        btnExport.setOnClickListener { exportViewModel.export(currentSize()) }
 
         btnOpen.setOnClickListener {
             val s = exportViewModel.uiState.value

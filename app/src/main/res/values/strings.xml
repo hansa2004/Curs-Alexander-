@@ -353,4 +353,26 @@
 
     <!-- Home: блок обучения -->
     <string name="education_short_desc">4 коротких материала о самоконтроле и здоровье</string>
+
+    <!-- Контекст измерения -->
+    <string name="measure_context_title">Контекст измерения</string>
+    <string name="measure_context_hint">Необязательный блок: помогает пояснить условия, при которых вы внесли показатель.</string>
+
+    <string name="measure_context_time_of_day">Время суток</string>
+    <string name="measure_context_time_morning">Утро</string>
+    <string name="measure_context_time_day">День</string>
+    <string name="measure_context_time_evening">Вечер</string>
+
+    <string name="measure_context_state">Состояние</string>
+    <string name="measure_context_state_rest">Покой</string>
+    <string name="measure_context_state_after_load">После нагрузки</string>
+    <string name="measure_context_state_after_stress">После стресса</string>
+
+    <string name="measure_context_comment">Комментарий к контексту (необязательно)</string>
+
+    <string name="measure_context_mixed_hint">Есть записи с разными условиями (контекст). Для более наглядного сравнения учитывайте подписи к точкам.</string>
+
+    <string name="pdf_report_text_size_title">Размер текста в PDF</string>
+    <string name="pdf_report_text_size_normal">Обычный</string>
+    <string name="pdf_report_text_size_large">Крупный</string>
 </resources>

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.curs_alexander.data.db.DbProvider
+import com.example.curs_alexander.data.db.BloodPressureWithContext
 import com.example.curs_alexander.data.migrations.LegacyDataMigrator
 import com.example.curs_alexander.userparams.UserParamsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,17 +31,17 @@ class AnalyticsViewModel(app: Application) : AndroidViewModel(app) {
             // Подстрахуемся: если ещё остались данные в SharedPreferences, мигрируем их в Room
             LegacyDataMigrator(getApplication()).migrateIfNeeded(db)
 
-            val pressures = repo.loadPressureAll().sortedByDescending { it.timestampMillis }
+            val pressuresWithCtx = repo.loadPressureAll()
             val symptoms = repo.loadSymptomsAll().sortedByDescending { it.timestampMillis }
 
             val userParams = userParamsRepo.params.first()
 
-            val summary = buildPressureSummary(pressures, userParams)
+            val summary = buildPressureSummary(pressuresWithCtx, userParams)
             val stats = buildSymptomStats(symptoms)
 
             _state.value = AnalyticsUiState(
                 pressureSummary = summary,
-                pressureHistory = pressures,
+                pressureHistory = pressuresWithCtx,
                 symptomStats = stats,
                 symptomLast = symptoms.take(20),
                 isLoading = false
@@ -49,15 +50,15 @@ class AnalyticsViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun buildPressureSummary(
-        all: List<com.example.curs_alexander.data.db.BloodPressureEntity>,
+        all: List<BloodPressureWithContext>,
         userParams: com.example.curs_alexander.userparams.UserParams
     ): PressureSummary {
         val from = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -7) }.timeInMillis
-        val last7d = all.filter { it.timestampMillis >= from }
+        val last7d = all.map { it.bp }.filter { it.timestampMillis >= from }
 
         val avgSys = last7d.takeIf { it.isNotEmpty() }?.map { it.systolic }?.average()?.toInt()
         val avgDia = last7d.takeIf { it.isNotEmpty() }?.map { it.diastolic }?.average()?.toInt()
-        val last = all.firstOrNull()
+        val last = all.firstOrNull()?.bp
 
         val upperSys = userParams.upperSystolic
         val upperDia = userParams.upperDiastolic

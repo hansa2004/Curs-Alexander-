@@ -4,6 +4,9 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
+import com.example.curs_alexander.data.db.BloodPressureWithContext
+import java.util.Date
+import java.util.Locale
 
 /**
  * Простой генератор PDF на стандартном Android API (PdfDocument).
@@ -14,26 +17,28 @@ class PdfReportGenerator {
     private val pageWidth = 595 // A4 примерно при 72dpi
     private val pageHeight = 842
 
-    private val margin = 40
+    private val baseMargin = 40
 
-    private val paintTitle = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 18f
-        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    private fun scaleFor(size: PdfTextSize): Float = when (size) {
+        PdfTextSize.NORMAL -> 1.0f
+        PdfTextSize.LARGE -> 1.25f
     }
 
-    private val paintH2 = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 14f
-        typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+    private fun createPaint(sizePx: Float, bold: Boolean): Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textSize = sizePx
+        typeface = Typeface.create(Typeface.DEFAULT, if (bold) Typeface.BOLD else Typeface.NORMAL)
     }
 
-    private val paintText = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textSize = 11f
-        typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-    }
+    fun generate(data: PdfReportData, textSize: PdfTextSize = PdfTextSize.NORMAL): PdfDocument {
+        val scale = scaleFor(textSize)
 
-    private val lineSpacing = 16
+        val margin = (baseMargin * scale).toInt()
+        val lineSpacing = (16 * scale).toInt().coerceAtLeast(14)
 
-    fun generate(data: PdfReportData): PdfDocument {
+        val paintTitle = createPaint(18f * scale, bold = true)
+        val paintH2 = createPaint(14f * scale, bold = true)
+        val paintText = createPaint(11f * scale, bold = false)
+
         val doc = PdfDocument()
 
         var pageNumber = 1
@@ -66,14 +71,14 @@ class PdfReportGenerator {
 
         // Заголовок
         drawLine(data.title, paintTitle)
-        y += 8
+        y += (8 * scale).toInt()
 
         // Пользователь
         drawLine("Пользователь: ${data.user.name ?: "(не указано)"}")
         drawLine("Дата рождения: ${data.user.birthDate ?: "(не указано)"}")
-        y += 8
+        y += (8 * scale).toInt()
         drawLine(data.periodText)
-        y += 8
+        y += (8 * scale).toInt()
 
         // Краткое резюме (для быстрого просмотра)
         ensureSpace(6)
@@ -86,7 +91,7 @@ class PdfReportGenerator {
         } else {
             drawLine("Топ симптомов: —")
         }
-        y += 8
+        y += (8 * scale).toInt()
 
         // Давление
         ensureSpace(2)
@@ -110,7 +115,7 @@ class PdfReportGenerator {
             }
         )
 
-        y += 4
+        y += (4 * scale).toInt()
         drawLine("Список измерений:")
         if (data.pressures.isEmpty()) {
             drawLine("— нет данных")
@@ -120,7 +125,7 @@ class PdfReportGenerator {
             }
         }
 
-        y += 10
+        y += (10 * scale).toInt()
 
         // Симптомы
         ensureSpace(2)
@@ -138,7 +143,7 @@ class PdfReportGenerator {
                 }
             }
 
-            y += 6
+            y += (6 * scale).toInt()
             drawLine("Последние записи:")
             data.symptoms.take(50).forEach { s ->
                 val intensityText = s.intensity?.let { "интенсивность: $it, " } ?: ""
@@ -146,7 +151,28 @@ class PdfReportGenerator {
             }
         }
 
-        y += 12
+        y += (10 * scale).toInt()
+
+        // Контекст измерений (отдельный раздел, без интерпретации)
+        ensureSpace(2)
+        drawLine("Контекст измерения", paintH2)
+        drawParagraph(
+            listOf(
+                "Этот раздел содержит условия, при которых были внесены измерения.",
+                "Информация носит поясняющий характер и не является медицинским выводом."
+            )
+        )
+
+        val ctxLines = buildContextLines(data.pressureWithContext)
+        if (ctxLines.isEmpty()) {
+            drawLine("— контекст не указан")
+        } else {
+            drawLine("Давление: контекст по измерениям")
+            ctxLines.forEach { line ->
+                ensureSpace(1)
+                drawLine("• $line")
+            }
+        }
 
         // Примечание
         ensureSpace(3)
@@ -159,19 +185,59 @@ class PdfReportGenerator {
         )
 
         // Номер страницы
-        drawPageFooter(canvas, pageNumber)
+        drawPageFooter(canvas, pageNumber, margin, pageHeight, paintText)
 
         doc.finishPage(page)
         return doc
     }
 
-    private fun drawPageFooter(canvas: Canvas, pageNumber: Int) {
+    private fun drawPageFooter(canvas: Canvas, pageNumber: Int, margin: Int, pageHeight: Int, paint: Paint) {
         val footer = "Стр. $pageNumber"
-        canvas.drawText(footer, margin.toFloat(), (pageHeight - margin / 2).toFloat(), paintText)
+        canvas.drawText(footer, margin.toFloat(), (pageHeight - margin / 2).toFloat(), paint)
     }
 
     private fun formatTs(ts: Long): String {
-        val df = java.text.SimpleDateFormat("dd.MM.yyyy HH:mm", java.util.Locale.getDefault())
-        return df.format(java.util.Date(ts))
+        val df = java.text.SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
+        return df.format(Date(ts))
+    }
+
+    private fun buildContextLines(list: List<BloodPressureWithContext>): List<String> {
+        if (list.isEmpty()) return emptyList()
+
+        // Берём только записи, где пользователь действительно что-то заполнил.
+        val filled = list
+            .filter {
+                !it.timeOfDay.isNullOrBlank() || !it.state.isNullOrBlank() || !it.contextComment.isNullOrBlank()
+            }
+            .take(120) // разумный лимит, чтобы отчёт не разрастался
+
+        if (filled.isEmpty()) return emptyList()
+
+        return filled.map { bp ->
+            val dt = formatTs(bp.bp.timestampMillis)
+            val parts = mutableListOf<String>()
+
+            val time = when (bp.timeOfDay) {
+                "morning" -> "утро"
+                "day" -> "день"
+                "evening" -> "вечер"
+                else -> null
+            }
+            if (!time.isNullOrBlank()) parts.add(time)
+
+            val state = when (bp.state) {
+                "rest" -> "покой"
+                "after_load" -> "после нагрузки"
+                "after_stress" -> "после стресса"
+                else -> null
+            }
+            if (!state.isNullOrBlank()) parts.add(state)
+
+            val comment = bp.contextComment?.trim().orEmpty().ifBlank { null }
+            if (!comment.isNullOrBlank()) parts.add(comment)
+
+            val ctx = parts.joinToString(", ")
+            "${dt} — ${bp.bp.systolic}/${bp.bp.diastolic}${if (ctx.isNotBlank()) " (${ctx})" else ""}"
+        }
     }
 }
