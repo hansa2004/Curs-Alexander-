@@ -55,8 +55,9 @@ class QuickActionPickerAdapter(
             tvTitle.setText(item.titleRes)
             tvSubtitle.text = buildSubtitle(itemView)
 
-            val style = QuickActionIconStyle.fromId(iconOverrides[item.id])
-            ivIcon.setImageResource(style?.iconRes ?: item.iconRes)
+            // В окне "Добавить карточку" всегда показываем единый плюсик.
+            // Иконку пользователь может выбрать позже в кастомизации уже добавленной плитки.
+            ivIcon.setImageResource(R.drawable.ic_add_24)
 
             val accent = ContextCompat.getColor(itemView.context, item.accentColorRes)
             val shape = ShapeAppearanceModel.builder().setAllCornerSizes(999f).build()

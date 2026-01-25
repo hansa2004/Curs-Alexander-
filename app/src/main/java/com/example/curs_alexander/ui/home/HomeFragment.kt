@@ -275,22 +275,32 @@ class HomeFragment : Fragment() {
     private fun showQuickActionCustomizeDialog(type: QuickActionType) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_quick_action_customize, null)
 
+        val cardPreview = dialogView.findViewById<com.google.android.material.card.MaterialCardView>(R.id.cardPreview)
+        val ivPreviewIcon = dialogView.findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.ivPreviewIcon)
+        val tvPreviewTitle = dialogView.findViewById<com.google.android.material.textview.MaterialTextView>(R.id.tvPreviewTitle)
+
         val recyclerIcons = dialogView.findViewById<RecyclerView>(R.id.recyclerIcons)
         recyclerIcons.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
             requireContext(),
             RecyclerView.HORIZONTAL,
             false
         )
-        recyclerIcons.adapter = com.example.curs_alexander.ui.home.quickactions.QuickActionIconOptionsAdapter { style ->
+
+        val iconsAdapter = com.example.curs_alexander.ui.home.quickactions.QuickActionIconOptionsAdapter { style ->
             quickVm.setIcon(type, style)
         }
+        recyclerIcons.adapter = iconsAdapter
 
-        val grid = dialogView.findViewById<android.widget.GridLayout>(R.id.gridColors)
+        val recyclerColors = dialogView.findViewById<RecyclerView>(R.id.recyclerColors)
+        recyclerColors.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(), 5)
+        val colorsAdapter = com.example.curs_alexander.ui.home.quickactions.QuickActionColorOptionsAdapter(
+            colors = QuickActionColorPalette.colors,
+            onClick = { colorInt -> quickVm.setColor(type, colorInt) }
+        )
+        recyclerColors.adapter = colorsAdapter
+
         val btnResetColor = dialogView.findViewById<MaterialButton>(R.id.btnResetColor)
         val btnResetIcon = dialogView.findViewById<MaterialButton>(R.id.btnResetIcon)
-
-        val sizePx = resources.displayMetrics.density * 36
-        val marginPx = (resources.displayMetrics.density * 6).toInt()
 
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.quick_actions_customize_title))
@@ -298,24 +308,62 @@ class HomeFragment : Fragment() {
             .setNegativeButton(android.R.string.cancel, null)
             .create()
 
-        grid.removeAllViews()
-        QuickActionColorPalette.colors.forEach { colorInt ->
-            val dot = ImageView(requireContext()).apply {
-                // qa_color_dot — это shape (oval) с прозрачной заливкой, поэтому его нужно тинтить как background
-                setBackgroundResource(R.drawable.qa_color_dot)
-                backgroundTintList = ColorStateList.valueOf(colorInt)
+        // Превью: заголовок и базовые значения
+        tvPreviewTitle.setText(type.titleRes)
 
-                val lp = android.widget.GridLayout.LayoutParams().apply {
-                    width = sizePx.toInt()
-                    height = sizePx.toInt()
-                    setMargins(marginPx)
-                }
-                layoutParams = lp
-                isClickable = true
-                isFocusable = true
-                setOnClickListener { quickVm.setColor(type, colorInt) }
+        fun applyPreview(accent: Int, iconRes: Int) {
+            // иконка в круге
+            ivPreviewIcon.setImageResource(iconRes)
+            ivPreviewIcon.setBackgroundResource(R.drawable.qa_color_dot)
+            ivPreviewIcon.backgroundTintList = ColorStateList.valueOf(accent)
+            ivPreviewIcon.imageTintList = ColorStateList.valueOf(
+                androidx.core.content.ContextCompat.getColor(requireContext(), android.R.color.white)
+            )
+
+            // фон карточки: лёгкая пастель
+            val surface = androidx.core.content.ContextCompat.getColor(requireContext(), android.R.color.white)
+            fun blend(fg: Int, bg: Int, ratio: Float): Int {
+                val r = (android.graphics.Color.red(bg) + (android.graphics.Color.red(fg) - android.graphics.Color.red(bg)) * ratio).toInt().coerceIn(0, 255)
+                val g = (android.graphics.Color.green(bg) + (android.graphics.Color.green(fg) - android.graphics.Color.green(bg)) * ratio).toInt().coerceIn(0, 255)
+                val b = (android.graphics.Color.blue(bg) + (android.graphics.Color.blue(fg) - android.graphics.Color.blue(bg)) * ratio).toInt().coerceIn(0, 255)
+                return android.graphics.Color.rgb(r, g, b)
             }
-            grid.addView(dot)
+            cardPreview.setCardBackgroundColor(blend(accent, surface, 0.14f))
+        }
+
+        // Подписываемся только пока живёт диалог
+        val job = viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    quickVm.colors.collect { map ->
+                        val defaultAccent = androidx.core.content.ContextCompat.getColor(requireContext(), type.accentColorRes)
+                        val accent = map[type.id] ?: defaultAccent
+                        colorsAdapter.setSelected(map[type.id])
+
+                        val iconStyleId = quickVm.iconOverrides.value[type.id]
+                        val iconRes = com.example.curs_alexander.ui.home.quickactions.QuickActionIconStyle.fromId(iconStyleId)?.iconRes
+                            ?: type.iconRes
+
+                        applyPreview(accent, iconRes)
+                    }
+                }
+                launch {
+                    quickVm.iconOverrides.collect { overrides ->
+                        val styleId = overrides[type.id]
+                        iconsAdapter.setSelected(styleId)
+
+                        val defaultAccent = androidx.core.content.ContextCompat.getColor(requireContext(), type.accentColorRes)
+                        val accent = quickVm.colors.value[type.id] ?: defaultAccent
+                        val iconRes = com.example.curs_alexander.ui.home.quickactions.QuickActionIconStyle.fromId(styleId)?.iconRes
+                            ?: type.iconRes
+                        applyPreview(accent, iconRes)
+                    }
+                }
+            }
+        }
+
+        dialog.setOnDismissListener {
+            job.cancel()
         }
 
         btnResetColor.setOnClickListener { quickVm.clearColor(type) }

@@ -346,4 +346,11 @@
 
     <string name="analytics_not_enough_points">Недостаточно данных для отображения динамики</string>
     <string name="analytics_open_data_status">Состояние данных</string>
+
+    <!-- Home: контекстные подсказки -->
+    <string name="home_hints_title">Контекстные подсказки</string>
+    <string name="home_hints_desc">Нейтральные напоминания для удобства ведения дневника</string>
+
+    <!-- Home: блок обучения -->
+    <string name="education_short_desc">4 коротких материала о самоконтроле и здоровье</string>
 </resources>

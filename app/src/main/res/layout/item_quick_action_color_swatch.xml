@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="44dp"
+    android:layout_height="44dp"
+    android:layout_margin="6dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivSwatch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:background="@drawable/qa_unselected_outline"
+        android:padding="4dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.QA.Circle" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivFill"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:padding="8dp"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.QA.Circle" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivCheck"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center"
+        android:contentDescription="@null"
+        android:src="@android:drawable/checkbox_on_background"
+        android:visibility="gone"
+        app:tint="@android:color/white" />
+
+</FrameLayout>

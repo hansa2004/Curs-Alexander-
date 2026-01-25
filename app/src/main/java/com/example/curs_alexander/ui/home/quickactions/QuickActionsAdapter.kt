@@ -78,7 +78,8 @@ class QuickActionsAdapter(
             tvTitle.setText(item.titleRes)
 
             val iconStyle = QuickActionIconStyle.fromId(iconOverrides[item.id])
-            ivIcon.setImageResource(iconStyle?.iconRes ?: item.iconRes)
+            // По требованию: по умолчанию (если нет пользовательского выбора) показываем плюсик.
+            ivIcon.setImageResource(iconStyle?.iconRes ?: R.drawable.ic_add_24)
 
             val defaultAccent = ContextCompat.getColor(itemView.context, item.accentColorRes)
             val accent = customColors[item.id] ?: defaultAccent

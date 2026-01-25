@@ -110,7 +110,7 @@
                     style="@style/TextAppearance.Material3.TitleMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Контекстные подсказки" />
+                    android:text="@string/home_hints_title" />
 
                 <com.google.android.material.textview.MaterialTextView
                     style="@style/TextAppearance.Material3.BodySmall"
@@ -118,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:text="Нейтральные напоминания для удобства ведения дневника" />
+                    android:text="@string/home_hints_desc" />
 
                 <LinearLayout
                     android:id="@+id/containerHints"
@@ -220,7 +220,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_foreground"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorPrimary"
                         android:contentDescription="@null" />
 
@@ -235,7 +235,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_background"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorOutline"
                         android:contentDescription="@null" />
                 </LinearLayout>
@@ -262,7 +262,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_foreground"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorPrimary"
                         android:contentDescription="@null" />
 
@@ -277,7 +277,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_background"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorOutline"
                         android:contentDescription="@null" />
                 </LinearLayout>
@@ -304,7 +304,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_foreground"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorPrimary"
                         android:contentDescription="@null" />
 
@@ -319,7 +319,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_background"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorOutline"
                         android:contentDescription="@null" />
                 </LinearLayout>
@@ -345,7 +345,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_foreground"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorPrimary"
                         android:contentDescription="@null" />
 
@@ -360,7 +360,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_background"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorOutline"
                         android:contentDescription="@null" />
                 </LinearLayout>
@@ -387,7 +387,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_foreground"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorPrimary"
                         android:contentDescription="@null" />
 
@@ -402,7 +402,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_launcher_background"
+                        android:src="@drawable/ic_add_24"
                         app:tint="?attr/colorOutline"
                         android:contentDescription="@null" />
                 </LinearLayout>
@@ -434,8 +434,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="
-4 коротких материала о самоконтроле и здоровье" />
+                        android:text="@string/education_short_desc" />
 
                 </LinearLayout>
 
