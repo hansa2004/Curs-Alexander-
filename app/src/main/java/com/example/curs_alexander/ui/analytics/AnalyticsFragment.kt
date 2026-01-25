@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.curs_alexander.R
@@ -53,6 +54,9 @@ class AnalyticsFragment : Fragment() {
         val tvHint = view.findViewById<TextView>(R.id.tvPressureHint)
         val rvPressure = view.findViewById<RecyclerView>(R.id.recyclerPressure)
 
+        val tvNotEnoughPoints = view.findViewById<TextView>(R.id.tvNotEnoughPoints)
+        val btnOpenDataStatus = view.findViewById<MaterialButton>(R.id.btnOpenDataStatus)
+
         val rvSymptomStats = view.findViewById<RecyclerView>(R.id.recyclerSymptomStats)
         val rvSymptomLast = view.findViewById<RecyclerView>(R.id.recyclerSymptomLast)
 
@@ -82,6 +86,10 @@ class AnalyticsFragment : Fragment() {
             override fun onTabUnselected(tab: TabLayout.Tab) {}
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
+
+        btnOpenDataStatus.setOnClickListener {
+            findNavController().navigate(R.id.dataStatusFragment)
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -121,7 +129,11 @@ class AnalyticsFragment : Fragment() {
                                 "Есть измерения, которые ниже установленного вами порога"
                         }
                     }
+
                     pressureAdapter.submit(state.pressureHistory)
+
+                    // Интеграция с динамикой: если точек < 2 — не строим динамику и показываем сообщение.
+                    tvNotEnoughPoints.isVisible = state.pressureHistory.size < 2
 
                     // Симптомы
                     symptomStatsAdapter.submit(state.symptomStats)

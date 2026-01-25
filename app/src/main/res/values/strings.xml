@@ -303,4 +303,33 @@
     <!-- Предупреждения по пользовательским порогам давления (не медицинская рекомендация) -->
     <string name="measure_warning_above_user_threshold">Показатель превышает установленный пользователем порог</string>
     <string name="measure_warning_below_user_threshold">Показатель ниже установленного пользователем порога</string>
+
+    <!-- Состояние данных (контроль полноты пользовательских данных) -->
+    <string name="data_status_title">Состояние данных</string>
+    <string name="data_status_explain">Полнота данных влияет на наглядность и точность отображаемой динамики.</string>
+
+    <string name="data_status_overall">Общий статус</string>
+    <string name="data_status_enough">Данных достаточно</string>
+    <string name="data_status_partial">Данные введены частично</string>
+    <string name="data_status_not_enough">Недостаточно данных</string>
+
+    <string name="data_status_days_placeholder">Записи за 7 дней: 0/7</string>
+    <string name="data_status_days_value">Записи за 7 дней: %1$d/7</string>
+
+    <string name="data_status_percent_placeholder">Заполненность: 0%</string>
+    <string name="data_status_percent_value">Заполненность: %1$d%%</string>
+
+    <string name="data_status_indicators">Индикаторы</string>
+    <string name="data_status_indicator_today">Есть записи за сегодня</string>
+    <string name="data_status_indicator_last3">Есть записи за последние 3 дня</string>
+    <string name="data_status_indicator_last7">Есть записи за последние 7 дней</string>
+    <string name="data_status_indicator_gaps">Пропуски более 2 дней подряд</string>
+
+    <string name="data_status_yes">Да</string>
+    <string name="data_status_no">Нет</string>
+    <string name="data_status_gaps_yes">Есть</string>
+    <string name="data_status_gaps_no">Нет</string>
+
+    <string name="analytics_not_enough_points">Недостаточно данных для отображения динамики</string>
+    <string name="analytics_open_data_status">Состояние данных</string>
 </resources>

@@ -119,4 +119,9 @@
         android:name="com.example.curs_alexander.ui.userparams.UserParamsFragment"
         android:label="@string/user_params_title" />
 
+    <fragment
+        android:id="@+id/dataStatusFragment"
+        android:name="com.example.curs_alexander.ui.datastatus.DataStatusFragment"
+        android:label="@string/data_status_title" />
+
 </navigation>

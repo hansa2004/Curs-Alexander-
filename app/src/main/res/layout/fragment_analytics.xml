@@ -79,6 +79,25 @@
                     android:textColor="?attr/colorPrimary"
                     android:text="" />
 
+                <!-- Сообщение о недостатке точек для динамики (показываем по логике во Fragment) -->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tvNotEnoughPoints"
+                    style="@style/TextAppearance.Material3.BodySmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:text="@string/analytics_not_enough_points"
+                    android:visibility="gone" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnOpenDataStatus"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/analytics_open_data_status" />
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
