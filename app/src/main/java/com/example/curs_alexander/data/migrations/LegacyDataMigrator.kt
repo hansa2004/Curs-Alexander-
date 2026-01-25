@@ -14,14 +14,20 @@ import kotlinx.coroutines.withContext
 
 /**
  * Одноразовая миграция старых данных (SharedPreferences/JSON) в Room.
- * Нужна, чтобы в курсовом проекте переход на Room не "сломал" старые записи.
  */
 class LegacyDataMigrator(private val context: Context) {
 
     suspend fun migrateIfNeeded(db: AppDatabase) = withContext(Dispatchers.IO) {
+        // Если миграция уже выполнялась (или была принудительно отключена) — ничего не делаем.
+        val migPrefs = context.getSharedPreferences(MIGRATION_PREFS, Context.MODE_PRIVATE)
+        if (migPrefs.getBoolean(KEY_DONE, false)) return@withContext
+
         val bpCount = db.bloodPressureDao().count()
         val symptomCount = db.symptomDao().count()
-        if (bpCount > 0 || symptomCount > 0) return@withContext
+        if (bpCount > 0 || symptomCount > 0) {
+            migPrefs.edit().putBoolean(KEY_DONE, true).apply()
+            return@withContext
+        }
 
         // Миграция давления/пульса: берем только давление
         val legacyMeasurements = HealthMeasurementsStorage(context).getAll()
@@ -61,6 +67,30 @@ class LegacyDataMigrator(private val context: Context) {
         if (symptomEntities.isNotEmpty()) {
             db.symptomDao().insertAll(symptomEntities)
         }
+
+        // В конце помечаем, что миграция выполнена, чтобы не запускать её снова.
+        migPrefs.edit().putBoolean(KEY_DONE, true).apply()
+    }
+
+    companion object {
+        private const val MIGRATION_PREFS = "legacy_migration"
+        private const val KEY_DONE = "done"
+
+        /**
+         * Вызывается при очистке данных: запрещает дальнейшую автозагрузку старых данных из prefs в Room.
+         */
+        fun markMigrationDone(context: Context) {
+            context.getSharedPreferences(MIGRATION_PREFS, Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean(KEY_DONE, true)
+                .apply()
+        }
+
+        fun resetMigrationFlag(context: Context) {
+            context.getSharedPreferences(MIGRATION_PREFS, Context.MODE_PRIVATE)
+                .edit()
+                .remove(KEY_DONE)
+                .apply()
+        }
     }
 }
-

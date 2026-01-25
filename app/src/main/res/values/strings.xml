@@ -112,6 +112,14 @@
     <string name="home_action_add_symptom">Добавить симптом</string>
     <string name="home_action_add_reminder">Добавить напоминание</string>
 
+    <!-- Быстрые действия: переходы в разделы (экономят 2+ клика) -->
+    <string name="home_action_open_analytics">Открыть аналитику</string>
+    <string name="home_action_open_medical_card">Открыть медкарту</string>
+    <string name="home_action_open_user_params">Параметры аналитики</string>
+    <string name="home_action_open_settings">Настройки</string>
+    <string name="home_action_open_education">Полезная информация</string>
+    <string name="home_action_open_data_status">Состояние данных</string>
+
     <string name="home_sections_title">Разделы приложения</string>
     <string name="home_section_measurements">Показатели здоровья</string>
     <string name="home_section_symptoms">Дневник симптомов</string>
@@ -214,6 +222,12 @@
     <string name="quick_actions_color_title">Цвет карточки</string>
     <string name="quick_actions_color_reset">Сбросить цвет</string>
     <string name="quick_actions_color_hint">В режиме редактирования нажмите на карточку, чтобы выбрать цвет</string>
+
+    <string name="quick_actions_customize_title">Настройка плитки</string>
+    <string name="quick_actions_customize_desc">Выберите иконку и цвет для быстрого действия.</string>
+
+    <string name="quick_actions_icon_title">Иконка</string>
+    <string name="quick_actions_icon_reset">Сбросить иконку</string>
 
     <string name="education_screen_title">Полезная информация</string>
     <string name="education_tap_to_read">Нажмите, чтобы прочитать</string>

@@ -35,6 +35,16 @@ class QuickActionsRepository(private val context: Context) {
         result
     }
 
+    val iconOverrides: Flow<Map<String, String>> = appContext.settingsDataStore.data.map { prefs ->
+        val result = mutableMapOf<String, String>()
+        val ids = QuickActionType.entries.map { it.id }
+        for (id in ids) {
+            val v = prefs[stringPreferencesKey(iconKey(id))]
+            if (!v.isNullOrBlank()) result[id] = v
+        }
+        result
+    }
+
     suspend fun setQuickActions(actions: List<QuickActionType>) {
         appContext.settingsDataStore.edit { prefs ->
             prefs[key] = actions.joinToString(",") { it.id }
@@ -50,6 +60,18 @@ class QuickActionsRepository(private val context: Context) {
     suspend fun clearColor(actionId: String) {
         appContext.settingsDataStore.edit { prefs ->
             prefs.remove(intPreferencesKey(colorKey(actionId)))
+        }
+    }
+
+    suspend fun setIconStyle(actionId: String, styleId: String) {
+        appContext.settingsDataStore.edit { prefs ->
+            prefs[stringPreferencesKey(iconKey(actionId))] = styleId
+        }
+    }
+
+    suspend fun clearIconStyle(actionId: String) {
+        appContext.settingsDataStore.edit { prefs ->
+            prefs.remove(stringPreferencesKey(iconKey(actionId)))
         }
     }
 
@@ -78,6 +100,7 @@ class QuickActionsRepository(private val context: Context) {
     }
 
     private fun colorKey(actionId: String): String = "qa_color_${actionId}"
+    private fun iconKey(actionId: String): String = "qa_icon_${actionId}"
 
     private companion object {
         private const val KEY_QUICK_ACTIONS = "quick_actions"

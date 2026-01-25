@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.setMargins
@@ -19,6 +17,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.curs_alexander.R
 import com.example.curs_alexander.ui.home.quickactions.QuickActionColorPalette
@@ -95,9 +94,10 @@ class HomeFragment : Fragment() {
             onStartDrag = { vh ->
                 touchHelper.startDrag(vh)
             },
-            onPickColor = { type ->
+            onPickColor = { /* legacy */ },
+            onPickIcon = { type ->
                 if (editMode) {
-                    showQuickActionColorDialog(type)
+                    showQuickActionCustomizeDialog(type)
                 }
             }
         )
@@ -151,6 +151,11 @@ class HomeFragment : Fragment() {
                 launch {
                     quickVm.colors.collect { colors ->
                         adapter.submitColors(colors)
+                    }
+                }
+                launch {
+                    quickVm.iconOverrides.collect { icons ->
+                        adapter.submitIconOverrides(icons)
                     }
                 }
             }
@@ -226,43 +231,74 @@ class HomeFragment : Fragment() {
         val all = QuickActionType.entries.toList()
         val available = all
             .filter { it !in existing }
+            .sortedWith(compareByDescending<QuickActionType> { it.isShortcutToSection() }
+                .thenBy { getString(it.titleRes) })
 
         if (available.isEmpty()) return
 
         val dialogView = layoutInflater.inflate(R.layout.dialog_quick_actions_add, null)
-        val listView = dialogView.findViewById<ListView>(R.id.list)
+        val recycler = dialogView.findViewById<RecyclerView>(R.id.recycler)
+        recycler.layoutManager = LinearLayoutManager(requireContext())
 
-        val labels = available.map { getString(it.titleRes) }
-        listView.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, labels)
+        lateinit var dialog: AlertDialog
 
-        val dialog = AlertDialog.Builder(requireContext())
+        val adapter = com.example.curs_alexander.ui.home.quickactions.QuickActionPickerAdapter { type ->
+            onAdd(type)
+            dialog.dismiss()
+        }
+        recycler.adapter = adapter
+        adapter.submit(available, quickVm.iconOverrides.value)
+
+        dialog = AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.home_quick_actions_title))
             .setView(dialogView)
             .setNegativeButton(android.R.string.cancel, null)
             .create()
 
-        listView.setOnItemClickListener { _, _, position, _ ->
-            onAdd(available[position])
-            dialog.dismiss()
-        }
-
         dialog.show()
     }
 
-    private fun showQuickActionColorDialog(type: QuickActionType) {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_quick_action_color, null)
-        val grid = dialogView.findViewById<android.widget.GridLayout>(R.id.grid)
-        val btnReset = dialogView.findViewById<MaterialButton>(R.id.btnReset)
+    private fun QuickActionType.isShortcutToSection(): Boolean {
+        return when (this) {
+            QuickActionType.OPEN_ANALYTICS,
+            QuickActionType.OPEN_DATA_STATUS,
+            QuickActionType.OPEN_MEDICAL_CARD,
+            QuickActionType.OPEN_USER_PARAMS,
+            QuickActionType.OPEN_SETTINGS,
+            QuickActionType.OPEN_EDUCATION -> true
+
+            else -> false
+        }
+    }
+
+    // В режиме редактирования тап по плитке открывает настройку (иконка/цвет)
+    private fun showQuickActionCustomizeDialog(type: QuickActionType) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_quick_action_customize, null)
+
+        val recyclerIcons = dialogView.findViewById<RecyclerView>(R.id.recyclerIcons)
+        recyclerIcons.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
+            requireContext(),
+            RecyclerView.HORIZONTAL,
+            false
+        )
+        recyclerIcons.adapter = com.example.curs_alexander.ui.home.quickactions.QuickActionIconOptionsAdapter { style ->
+            quickVm.setIcon(type, style)
+        }
+
+        val grid = dialogView.findViewById<android.widget.GridLayout>(R.id.gridColors)
+        val btnResetColor = dialogView.findViewById<MaterialButton>(R.id.btnResetColor)
+        val btnResetIcon = dialogView.findViewById<MaterialButton>(R.id.btnResetIcon)
 
         val sizePx = resources.displayMetrics.density * 36
         val marginPx = (resources.displayMetrics.density * 6).toInt()
 
-         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle(getString(R.string.quick_actions_color_title))
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.quick_actions_customize_title))
             .setView(dialogView)
             .setNegativeButton(android.R.string.cancel, null)
             .create()
 
+        grid.removeAllViews()
         QuickActionColorPalette.colors.forEach { colorInt ->
             val dot = ImageView(requireContext()).apply {
                 setImageResource(R.drawable.qa_color_dot)
@@ -275,20 +311,13 @@ class HomeFragment : Fragment() {
                 layoutParams = lp
                 isClickable = true
                 isFocusable = true
-                setOnClickListener {
-                    quickVm.setColor(type, colorInt)
-                    android.widget.Toast.makeText(requireContext(), "Цвет сохранён", android.widget.Toast.LENGTH_SHORT).show()
-                    dialog.dismiss()
-                }
+                setOnClickListener { quickVm.setColor(type, colorInt) }
             }
             grid.addView(dot)
         }
 
-        btnReset.setOnClickListener {
-            quickVm.clearColor(type)
-            android.widget.Toast.makeText(requireContext(), "Цвет сброшен", android.widget.Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
-        }
+        btnResetColor.setOnClickListener { quickVm.clearColor(type) }
+        btnResetIcon.setOnClickListener { quickVm.clearIcon(type) }
 
         dialog.show()
     }

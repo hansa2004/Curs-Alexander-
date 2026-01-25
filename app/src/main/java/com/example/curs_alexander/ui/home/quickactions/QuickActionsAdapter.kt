@@ -19,11 +19,13 @@ class QuickActionsAdapter(
     private val onClick: (QuickActionType) -> Unit,
     private val onDelete: (Int) -> Unit,
     private val onStartDrag: (RecyclerView.ViewHolder) -> Unit,
-    private val onPickColor: (QuickActionType) -> Unit
+    private val onPickColor: (QuickActionType) -> Unit,
+    private val onPickIcon: (QuickActionType) -> Unit
 ) : RecyclerView.Adapter<QuickActionsAdapter.VH>() {
 
     private val items = mutableListOf<QuickActionType>()
     private var customColors: Map<String, Int> = emptyMap()
+    private var iconOverrides: Map<String, String> = emptyMap()
 
     var editMode: Boolean = false
         set(value) {
@@ -39,6 +41,11 @@ class QuickActionsAdapter(
 
     fun submitColors(map: Map<String, Int>) {
         customColors = map
+        notifyDataSetChanged()
+    }
+
+    fun submitIconOverrides(map: Map<String, String>) {
+        iconOverrides = map
         notifyDataSetChanged()
     }
 
@@ -70,7 +77,8 @@ class QuickActionsAdapter(
         fun bind(item: QuickActionType) {
             tvTitle.setText(item.titleRes)
 
-            ivIcon.setImageResource(item.iconRes)
+            val iconStyle = QuickActionIconStyle.fromId(iconOverrides[item.id])
+            ivIcon.setImageResource(iconStyle?.iconRes ?: item.iconRes)
 
             val defaultAccent = ContextCompat.getColor(itemView.context, item.accentColorRes)
             val accent = customColors[item.id] ?: defaultAccent
@@ -115,8 +123,8 @@ class QuickActionsAdapter(
                 if (!editMode) {
                     onClick(item)
                 } else {
-                    // В режиме редактирования тап = выбрать цвет
-                    onPickColor(item)
+                    // В режиме редактирования тап = открыть меню настройки (иконка/цвет)
+                    onPickIcon(item)
                 }
             }
 

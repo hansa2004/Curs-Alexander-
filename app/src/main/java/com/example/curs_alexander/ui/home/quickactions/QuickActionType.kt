@@ -17,6 +17,7 @@ enum class QuickActionType(
     @DrawableRes val iconRes: Int,
     @ColorRes val accentColorRes: Int
 ) {
+    // --- Добавление данных (1 действие вместо захода в разделы) ---
     ADD_PRESSURE(
         id = "add_pressure",
         titleRes = R.string.home_action_add_pressure,
@@ -37,7 +38,7 @@ enum class QuickActionType(
         id = "add_symptom",
         titleRes = R.string.home_action_add_symptom,
         navDestinationId = R.id.symptomAddFragment,
-        iconRes = R.drawable.ic_add_24,
+        iconRes = R.drawable.ic_symptom_24,
         accentColorRes = R.color.qa_symptoms
     ),
     ADD_REMINDER(
@@ -45,8 +46,52 @@ enum class QuickActionType(
         titleRes = R.string.home_action_add_reminder,
         navDestinationId = R.id.remindersFragment,
         navArgs = bundleOf(RemindersFragment.ARG_OPEN_ADD_DIALOG to true),
-        iconRes = R.drawable.ic_add_24,
+        iconRes = R.drawable.ic_reminder_24,
         accentColorRes = R.color.qa_reminders
+    ),
+
+    // --- Быстрые переходы (2+ клика экономии) ---
+    OPEN_ANALYTICS(
+        id = "open_analytics",
+        titleRes = R.string.home_action_open_analytics,
+        navDestinationId = R.id.analyticsFragment,
+        iconRes = R.drawable.ic_analytics_24,
+        accentColorRes = R.color.qa_analytics
+    ),
+    OPEN_DATA_STATUS(
+        id = "open_data_status",
+        titleRes = R.string.home_action_open_data_status,
+        navDestinationId = R.id.dataStatusFragment,
+        iconRes = R.drawable.ic_info_24,
+        accentColorRes = R.color.qa_analytics
+    ),
+    OPEN_MEDICAL_CARD(
+        id = "open_medical_card",
+        titleRes = R.string.home_action_open_medical_card,
+        navDestinationId = R.id.medicalCardFragment,
+        iconRes = R.drawable.ic_medical_card_24,
+        accentColorRes = R.color.qa_medical_card
+    ),
+    OPEN_USER_PARAMS(
+        id = "open_user_params",
+        titleRes = R.string.home_action_open_user_params,
+        navDestinationId = R.id.userParamsFragment,
+        iconRes = R.drawable.ic_analytics_24,
+        accentColorRes = R.color.qa_analytics
+    ),
+    OPEN_SETTINGS(
+        id = "open_settings",
+        titleRes = R.string.home_action_open_settings,
+        navDestinationId = R.id.settingsFragment,
+        iconRes = R.drawable.ic_settings_24,
+        accentColorRes = R.color.qa_settings
+    ),
+    OPEN_EDUCATION(
+        id = "open_education",
+        titleRes = R.string.home_action_open_education,
+        navDestinationId = R.id.educationListFragment,
+        iconRes = R.drawable.ic_info_24,
+        accentColorRes = R.color.qa_settings
     );
 
     companion object {
